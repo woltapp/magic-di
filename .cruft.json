@@ -1,0 +1,18 @@
+{
+  "template": "https://github.com/woltapp/wolt-python-package-cookiecutter",
+  "commit": "79dbc2cb6d9b4f5f3fa5e9db3f5fa7d447ced511",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "author_name": "Nikita Zavadin",
+      "author_email": "nikita.zavadin@wolt.com",
+      "github_username": "woltapp",
+      "project_name": "magic-di",
+      "project_slug": "magic-di",
+      "package_name": "magic_di",
+      "project_short_description": "Dependency Injector that makes your life easier with built-in support of FastAPI, Celery (and it can be integrated with everything)",
+      "_template": "https://github.com/woltapp/wolt-python-package-cookiecutter"
+    }
+  },
+  "directory": null
+}

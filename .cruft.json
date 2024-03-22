@@ -10,7 +10,7 @@
       "project_name": "magic-di",
       "project_slug": "magic-di",
       "package_name": "magic_di",
-      "project_short_description": "Dependency Injector that makes your life easier with built-in support of FastAPI, Celery (but it can be integrated with everything)",
+      "project_short_description": "Dependency Injector that makes your life easier with built-in support of FastAPI, Celery (and it can be integrated with everything)",
       "_template": "https://github.com/woltapp/wolt-python-package-cookiecutter"
     }
   },

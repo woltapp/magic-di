@@ -1,5 +1,5 @@
 site_name: "magic-di"
-repo_url: https://github.com/RB387/magic-di
+repo_url: https://github.com/woltapp/magic-di
 
 theme:
   name: material

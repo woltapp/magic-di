@@ -8,15 +8,15 @@
 
 ---
 
-**Documentation**: [https://RB387.github.io/magic-di](https://RB387.github.io/magic-di)
+**Documentation**: [https://woltapp.github.io/magic-di](https://woltapp.github.io/magic-di)
 
-**Source Code**: [https://github.com/RB387/magic-di](https://github.com/RB387/magic-di)
+**Source Code**: [https://github.com/woltapp/magic-di](https://github.com/woltapp/magic-di)
 
 **PyPI**: [https://pypi.org/project/magic-di/](https://pypi.org/project/magic-di/)
 
 ---
 
-Dependency Injector that makes your life easier with built-in support of FastAPI, Celery (but it can be integrated with everything)
+Dependency Injector that makes your life easier with built-in support of FastAPI, Celery (and it can be integrated with everything)
 
 What are the problems with FastAPI’s dependency injector? 
 1) It forces you to use global variables. 

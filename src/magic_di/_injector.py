@@ -11,7 +11,6 @@ from typing import (
     Callable,
     Iterable,
     Iterator,
-    Self,
     TypeVar,
     cast,
     get_origin,
@@ -166,7 +165,7 @@ class DependencyInjector:
                 except Exception:
                     self.logger.exception("Failed to disconnect %s", cls.__name__)
 
-    async def __aenter__(self) -> Self:
+    async def __aenter__(self) -> DependencyInjector:  # noqa: PYI034
         await self.connect()
         return self
 

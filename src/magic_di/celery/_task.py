@@ -5,6 +5,7 @@ from functools import wraps
 from typing import Any, Callable, cast, get_type_hints
 
 from celery.app.task import Task
+
 from magic_di import Connectable, DependencyInjector
 from magic_di.celery._async_utils import EventLoop, run_in_event_loop
 from magic_di.celery._loader import InjectedCeleryLoaderProtocol
@@ -14,7 +15,7 @@ class BaseCeleryConnectableDeps(Connectable): ...
 
 
 class InjectableCeleryTaskMetaclass(type):
-    def __new__(cls, name: str, bases: tuple, dct: dict) -> type:
+    def __new__(cls, name: str, bases: tuple[type, ...], dct: dict[str, Any]) -> type:
         run = dct.get("run")
         run_wrapper = dct.get("run_wrapper")
 
@@ -32,7 +33,7 @@ class InjectableCeleryTaskMetaclass(type):
         return super().__new__(cls, name, bases, dct)
 
 
-class InjectableCeleryTask(Task, Connectable, metaclass=InjectableCeleryTaskMetaclass):
+class InjectableCeleryTask(Task, Connectable, metaclass=InjectableCeleryTaskMetaclass):  # type: ignore[type-arg]
     __annotations__ = {}
 
     def __init__(
@@ -83,9 +84,10 @@ class InjectableCeleryTask(Task, Connectable, metaclass=InjectableCeleryTaskMeta
                 InjectedCeleryLoaderProtocol,
                 self.app.loader,
             )
-            return loader.on_worker_process_init()
+            loader.on_worker_process_init()
+            return
 
-        return self.app.loader.on_worker_process_init()  # type: ignore[attr-defined]
+        self.app.loader.on_worker_process_init()  # type: ignore[attr-defined]
 
     @property
     def loaded(self) -> bool:
@@ -110,9 +112,9 @@ class InjectableCeleryTask(Task, Connectable, metaclass=InjectableCeleryTaskMeta
         return None
 
     @staticmethod
-    def run_wrapper(orig_run: Callable) -> Callable:
+    def run_wrapper(orig_run: Callable[..., Any]) -> Callable[..., Any]:
         @wraps(orig_run)
-        def runner(self: InjectableCeleryTask, *args, **kwargs) -> Any:
+        def runner(self: InjectableCeleryTask, *args: Any, **kwargs: Any) -> Any:
             if not self.loaded:
                 self.load()
 

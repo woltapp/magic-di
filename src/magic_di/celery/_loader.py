@@ -6,7 +6,8 @@ import threading
 from typing import TYPE_CHECKING, Any, Callable, Protocol, runtime_checkable
 
 from celery import signals
-from celery.loaders.app import AppLoader  # type: ignore[import]
+from celery.loaders.app import AppLoader  # type: ignore[import-untyped]
+
 from magic_di import DependencyInjector
 from magic_di.celery._async_utils import EventLoop, EventLoopGetter, run_in_event_loop
 
@@ -32,8 +33,8 @@ def get_celery_loader(
     _injector = injector or DependencyInjector()
     _event_loop_getter = event_loop_getter or EventLoopGetter()
 
-    class CeleryLoader(AppLoader):  # type: ignore[no-any-unimported]
-        def __init__(self, *args, **kwargs):
+    class CeleryLoader(AppLoader):  # type: ignore[no-any-unimported, misc]
+        def __init__(self, *args: Any, **kwargs: Any) -> None:
             super().__init__(*args, **kwargs)
             self.injector = _injector
             self.loaded = False

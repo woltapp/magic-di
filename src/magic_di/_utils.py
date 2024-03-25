@@ -8,7 +8,7 @@ from magic_di import ConnectableProtocol
 LegacyUnionType = type(Union[object, None])
 
 try:
-    from types import UnionType  # type: ignore[import-error]
+    from types import UnionType  # type: ignore[import-error,unused-ignore]
 except ImportError:
     UnionType = LegacyUnionType  # type: ignore[misc, assignment]
 
@@ -79,10 +79,10 @@ def is_injectable(cls: Any) -> bool:
     return safe_is_subclass(cls, ConnectableProtocol)
 
 
-def get_type_hints(obj: Any, *, include_extras=False) -> dict[str, type]:
+def get_type_hints(obj: Any, *, include_extras: bool = False) -> dict[str, type]:
     try:
         if is_class(obj):
-            return _get_type_hints(obj.__init__, include_extras=include_extras)  # type: ignore[misc]
+            return _get_type_hints(obj.__init__, include_extras=include_extras)
 
         return _get_type_hints(obj, include_extras=include_extras)
     except TypeError:

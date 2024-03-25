@@ -6,6 +6,7 @@ from typing import (
     TYPE_CHECKING,
     Annotated,
     Any,
+    AsyncIterator,
     Callable,
     Iterator,
     Protocol,
@@ -14,6 +15,7 @@ from typing import (
 )
 
 from fastapi.params import Depends
+
 from magic_di._injector import DependencyInjector
 
 if TYPE_CHECKING:
@@ -67,7 +69,7 @@ def inject_app(
     """
     injector = injector or DependencyInjector()
 
-    def collect_deps():
+    def collect_deps() -> None:
         _collect_dependencies(injector, app.router)
 
     app.state.dependency_injector = injector
@@ -80,12 +82,12 @@ def inject_app(
     return app
 
 
-def _inject_app_with_lifespan(app: FastAPI, collect_deps_fn: Callable) -> None:
+def _inject_app_with_lifespan(app: FastAPI, collect_deps_fn: Callable[[], None]) -> None:
     app_router: routing.APIRouter = app.router
     app_lifespan = app_router.lifespan_context
 
     @asynccontextmanager
-    async def injector_lifespan(app: FastAPI):
+    async def injector_lifespan(app: FastAPI) -> AsyncIterator[None]:
         collect_deps_fn()
 
         injector = app.state.dependency_injector
@@ -99,7 +101,7 @@ def _inject_app_with_lifespan(app: FastAPI, collect_deps_fn: Callable) -> None:
     app_router.lifespan_context = injector_lifespan
 
 
-def _inject_app_with_events(app: FastAPI, collect_deps_fn: Callable) -> None:
+def _inject_app_with_events(app: FastAPI, collect_deps_fn: Callable[[], None]) -> None:
     app.on_event("startup")(collect_deps_fn)
     app.on_event("startup")(app.state.dependency_injector.connect)
     app.on_event("shutdown")(app.state.dependency_injector.disconnect)
@@ -141,7 +143,7 @@ def _inspect_and_lazy_inject(obj: object, injector: DependencyInjector) -> None:
         injector.lazy_inject(dependency)
 
 
-def _find_fastapi_dependencies(dependency: Callable) -> Iterator[Callable]:
+def _find_fastapi_dependencies(dependency: Callable[..., Any]) -> Iterator[Callable[..., Any]]:
     """
     Recursively finds all FastAPI dependencies.
     It looks for FastAPI's Depends() in default arguments and in type annotations.

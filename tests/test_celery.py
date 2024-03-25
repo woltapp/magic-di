@@ -3,12 +3,12 @@ import tempfile
 from contextlib import contextmanager
 from dataclasses import dataclass
 from threading import Thread
-from typing import Iterator, cast
+from typing import Any, Iterator, cast
 from unittest.mock import MagicMock, call
 
 import pytest
 from celery import Celery
-from celery.bin.celery import celery  # type: ignore[import]
+from celery.bin.celery import celery  # type: ignore[import-untyped]
 from fastapi import FastAPI
 from magic_di import DependencyInjector
 from magic_di.celery import (
@@ -53,7 +53,11 @@ def celery_app(injector: DependencyInjector) -> Iterator[Celery]:
 @pytest.fixture(scope="module")
 def service_ping_task(celery_app: Celery) -> InjectableCeleryTask:
     @celery_app.task
-    async def service_ping(arg1: int, arg2: str, service: Service = PROVIDE) -> tuple:
+    async def service_ping(
+        arg1: int,
+        arg2: str,
+        service: Service = PROVIDE,
+    ) -> tuple[int, str, bool]:  # noqa: FA102
         return arg1, arg2, service.is_alive()
 
     return cast(InjectableCeleryTask, service_ping)
@@ -62,7 +66,11 @@ def service_ping_task(celery_app: Celery) -> InjectableCeleryTask:
 @pytest.fixture(scope="module")
 def service_ping_task_sync(celery_app: Celery) -> InjectableCeleryTask:
     @celery_app.task
-    def service_ping_sync(arg1: int, arg2: str, service: Service = PROVIDE) -> tuple:
+    def service_ping_sync(
+        arg1: int,
+        arg2: str,
+        service: Service = PROVIDE,
+    ) -> tuple[int, str, bool]:  # noqa: FA102
         return arg1, arg2, service.is_alive()
 
     return cast(InjectableCeleryTask, service_ping_sync)
@@ -77,7 +85,7 @@ def service_ping_class_based_task(celery_app: Celery) -> InjectableCeleryTask:
     class SyncServicePingTask(InjectableCeleryTask):
         deps: Deps
 
-        async def run(self, arg1: int, arg2: str):
+        async def run(self, arg1: int, arg2: str) -> tuple[int, str, bool]:  # noqa: FA102
             return arg1, arg2, self.deps.db.connected
 
     return SyncServicePingTask()
@@ -92,7 +100,7 @@ def service_ping_class_based_task_sync(celery_app: Celery) -> InjectableCeleryTa
     class ServicePingTask(InjectableCeleryTask):
         deps: Deps
 
-        def run(self, arg1: int, arg2: str):
+        def run(self, arg1: int, arg2: str) -> tuple[int, str, bool]:  # noqa: FA102
             return arg1, arg2, self.deps.db.connected
 
     return ServicePingTask()
@@ -100,12 +108,12 @@ def service_ping_class_based_task_sync(celery_app: Celery) -> InjectableCeleryTa
 
 @pytest.fixture(scope="module")
 def run_celery(
-    celery_app,
-    service_ping_task,
-    service_ping_task_sync,
-    service_ping_class_based_task,
-    service_ping_class_based_task_sync,
-):
+    celery_app: Celery,
+    service_ping_task: InjectableCeleryTask,
+    service_ping_task_sync: InjectableCeleryTask,
+    service_ping_class_based_task: InjectableCeleryTask,
+    service_ping_class_based_task_sync: InjectableCeleryTask,
+) -> Iterator[Celery]:
     celery_app.register_task(service_ping_class_based_task)
     celery_app.register_task(service_ping_class_based_task_sync)
 
@@ -119,7 +127,7 @@ def run_celery(
     yield celery_app
 
     with contextlib.suppress(SystemExit):
-        (celery.main(args=["control", "shutdown"]))
+        celery.main(args=["control", "shutdown"])
 
     thread.join()
 
@@ -127,7 +135,7 @@ def run_celery(
 def test_async_function_based_tasks(
     run_celery: Celery,
     service_ping_task: InjectableCeleryTask,
-):
+) -> None:
     result = service_ping_task.apply_async(args=(1337, "leet")).get(
         disable_sync_subtasks=False,
     )
@@ -148,7 +156,7 @@ def test_async_function_based_tasks(
 async def test_sync_function_based_tasks(
     run_celery: Celery,
     service_ping_task_sync: InjectableCeleryTask,
-):
+) -> None:
     result = service_ping_task_sync.apply_async(args=(1337, "leet")).get(
         disable_sync_subtasks=False,
     )
@@ -168,7 +176,7 @@ async def test_sync_function_based_tasks(
 def test_async_class_based_tasks(
     run_celery: Celery,
     service_ping_class_based_task: InjectableCeleryTask,
-):
+) -> None:
     result = service_ping_class_based_task.apply_async(args=(1337, "leet")).get(
         disable_sync_subtasks=False,
     )
@@ -188,7 +196,7 @@ def test_async_class_based_tasks(
 def test_sync_class_based_tasks(
     run_celery: Celery,
     service_ping_class_based_task_sync: InjectableCeleryTask,
-):
+) -> None:
     result = service_ping_class_based_task_sync.apply_async(args=(1337, "leet")).get(
         disable_sync_subtasks=False,
     )
@@ -205,7 +213,7 @@ def test_sync_class_based_tasks(
     assert list(result) == [1010, "123", True]
 
 
-def test_retries_func_based_task():
+def test_retries_func_based_task() -> None:
     with create_celery(DependencyInjector(), use_broker_and_backend=False) as app:
         app.conf.update({"task_always_eager": True})
         mock = MagicMock()
@@ -220,7 +228,7 @@ def test_retries_func_based_task():
             _ = ping_task.apply_async().get(disable_sync_subtasks=False)
 
 
-def test_retries_class_based_task():
+def test_retries_class_based_task() -> None:
     with create_celery(DependencyInjector(), use_broker_and_backend=False) as app:
         app.conf.update({"task_always_eager": True})
 
@@ -231,7 +239,7 @@ def test_retries_class_based_task():
             autoretry_for = (ValueError,)
             retry_backoff = 0
 
-            async def run(self, service: Service = PROVIDE):
+            async def run(self, service: Service = PROVIDE) -> None:
                 assert service.is_alive()
                 mock()
                 raise ValueError(TEST_ERR_MSG)
@@ -258,8 +266,8 @@ async def test_async_function_based_tasks_inside_event_loop(
     *,
     task_always_eager: bool,
     use_broker_and_backend: bool,
-    expected_mock_calls: list,
-):
+    expected_mock_calls: list[Any],  # noqa: FA102
+) -> None:
     injector = DependencyInjector()
 
     with create_celery(injector, use_broker_and_backend=use_broker_and_backend) as app:
@@ -272,14 +280,14 @@ async def test_async_function_based_tasks_inside_event_loop(
             arg1: int,
             arg2: str,
             service: Service = PROVIDE,
-        ) -> tuple:
+        ) -> tuple[int, str, bool]:  # noqa: FA102
             mock()
             return arg1, arg2, service.is_alive()
 
         fastapi_app = FastAPI()
 
         @fastapi_app.get("/")
-        async def handler():
+        async def handler() -> dict[str, bool]:  # noqa: FA102
             ping_task.apply_async(args=(1337, "leet"))
             ping_task.apply(args=(1337, "leet-2"))
             return {"ok": True}

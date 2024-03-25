@@ -4,6 +4,7 @@ from functools import lru_cache
 from typing import TYPE_CHECKING, Annotated, TypeVar
 
 from fastapi import Depends, Request
+
 from magic_di._injector import Injectable
 
 if TYPE_CHECKING:

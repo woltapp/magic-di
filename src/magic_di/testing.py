@@ -1,13 +1,16 @@
+from __future__ import annotations
+
+from typing import Any
 from unittest.mock import AsyncMock
 
 from magic_di import ConnectableProtocol
 
 
-def get_injectable_mock_cls(return_value):
+def get_injectable_mock_cls(return_value: Any) -> type[ConnectableProtocol]:
     class ClientMetaclassMock(ConnectableProtocol):
         __annotations__ = {}
 
-        def __new__(cls, *_, **__):
+        def __new__(cls, *_: Any, **__: Any) -> Any:
             return return_value
 
     return ClientMetaclassMock
@@ -34,12 +37,12 @@ class InjectableMock(AsyncMock):
     """
 
     @property
-    def mock_cls(self):
+    def mock_cls(self) -> type[ConnectableProtocol]:
         return get_injectable_mock_cls(self)
 
-    async def __connect__(self): ...
+    async def __connect__(self) -> None: ...
 
-    async def __disconnect__(self): ...
+    async def __disconnect__(self) -> None: ...
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args: Any, **kwargs: Any) -> InjectableMock:
         return self.__class__(*args, **kwargs)

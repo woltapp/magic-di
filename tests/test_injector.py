@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Annotated, Generic, TypeVar
+from typing import Annotated, Any, Generic, TypeVar
 
 import pytest
 from magic_di import Connectable, DependencyInjector, Injectable
@@ -21,7 +21,7 @@ from tests.conftest import (
 
 
 @pytest.mark.asyncio()
-async def test_class_injection_success(injector):
+async def test_class_injection_success(injector: DependencyInjector) -> None:
     injected_service = injector.inject(Service)()
     assert not injected_service.is_alive()
 
@@ -48,8 +48,8 @@ async def test_class_injection_success(injector):
 
 
 @pytest.mark.asyncio()
-async def test_function_injection_success(injector):
-    def run_service(service: Service):
+async def test_function_injection_success(injector: DependencyInjector) -> None:
+    def run_service(service: Service) -> Service:
         return service
 
     injected = injector.inject(run_service)
@@ -61,13 +61,13 @@ async def test_function_injection_success(injector):
     assert isinstance(service, Service)
 
 
-def test_class_injection_missing_class(injector):
+def test_class_injection_missing_class(injector: DependencyInjector) -> None:
     with pytest.raises(InjectionError):
         injector.inject(BrokenService)
 
 
 @pytest.mark.asyncio()
-async def test_class_injection_with_bindings(injector):
+async def test_class_injection_with_bindings(injector: DependencyInjector) -> None:
     injector.bind({RepoInterface: Repository})
 
     injected_service = injector.inject(ServiceWithBindings)()
@@ -86,7 +86,7 @@ async def test_class_injection_with_bindings(injector):
     assert not injected_service.repo.db.connected
 
 
-def test_lazy_inject(injector):
+def test_lazy_inject(injector: DependencyInjector) -> None:
     get_injected_cls = injector.lazy_inject(Service)
     injected_service = get_injected_cls()
 
@@ -94,7 +94,7 @@ def test_lazy_inject(injector):
     assert injected_service is get_injected_cls()
 
 
-def test_overriden_injection(injector):
+def test_overriden_injection(injector: DependencyInjector) -> None:
     service = injector.inject(Service)()
 
     with injector.override({Database: AnotherDatabase}):
@@ -110,7 +110,7 @@ def test_overriden_injection(injector):
     assert service is service_after_overriden_injection
 
 
-def test_embedded_injection(injector):
+def test_embedded_injection(injector: DependencyInjector) -> None:
     class ClsWithEmbeddedInjection(Connectable):
         def __init__(self, injected_injector: DependencyInjector):
             assert injected_injector is injector
@@ -120,16 +120,16 @@ def test_embedded_injection(injector):
     assert isinstance(injected.service, Service)
 
 
-def test_injector_iter_deps(injector):
+def test_injector_iter_deps(injector: DependencyInjector) -> None:
     injector.inject(Service)()
 
     deps = [type(dep) for dep in injector.iter_deps()]
     assert deps == [Database, Repository, AsyncWorkers, Service]
 
 
-def test_injector_with_metaclass(injector):
+def test_injector_with_metaclass(injector: DependencyInjector) -> None:
     class _ServiceMetaClass(type):
-        def __new__(cls, name: str, bases: tuple[type, ...], attrs: dict) -> type:
+        def __new__(cls, name: str, bases: tuple[type, ...], attrs: dict[str, Any]) -> type[Any]:
             for _ in attrs["__orig_bases__"]:
                 ...
 
@@ -148,7 +148,7 @@ def test_injector_with_metaclass(injector):
     injector.inject(WrappedService)()
 
 
-def test_injector_flag_injectable(injector):
+def test_injector_flag_injectable(injector: DependencyInjector) -> None:
     @dataclass
     class ServiceWithNonConnectable:
         db: Annotated[NonConnectableDatabase, Injectable]

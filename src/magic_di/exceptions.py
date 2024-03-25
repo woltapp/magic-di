@@ -9,7 +9,7 @@ class InjectorError(Exception): ...
 
 
 class InjectionError(InjectorError):
-    def __init__(self, obj: Callable, signature: Signature):
+    def __init__(self, obj: Callable[..., Any], signature: Signature[Any]):
         self.obj = obj
         self.signature = signature
 
@@ -64,7 +64,7 @@ class InspectionError(InjectorError):
         return f"Failed to inspect {self.obj}. \n{object_location}\nSee the exception above"
 
 
-def _get_object_source_location(obj: Callable) -> str:
+def _get_object_source_location(obj: Callable[..., Any]) -> str:
     try:
         _, obj_line_number = inspect.getsourcelines(obj)
         source_file = inspect.getsourcefile(obj)

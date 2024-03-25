@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import inspect
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Awaitable, TypeVar, overload
 
 from magic_di import DependencyInjector
 
@@ -10,7 +10,27 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
 
-def inject_and_run(fn: Callable, injector: DependencyInjector | None = None) -> Any:
+T = TypeVar("T")
+
+
+@overload
+def inject_and_run(
+    fn: Callable[..., Awaitable[T]],
+    injector: DependencyInjector | None = None,
+) -> T: ...
+
+
+@overload
+def inject_and_run(
+    fn: Callable[..., T],
+    injector: DependencyInjector | None = None,
+) -> T: ...
+
+
+def inject_and_run(
+    fn: Callable[..., T],
+    injector: DependencyInjector | None = None,
+) -> T:
     """
     This function takes a callable, injects dependencies into it using the provided injector,
     and then runs the function. If the function is a coroutine, it will be awaited.
@@ -33,12 +53,12 @@ def inject_and_run(fn: Callable, injector: DependencyInjector | None = None) -> 
     """
     injector = injector or DependencyInjector()
 
-    injected: Callable = injector.inject(fn)
+    injected = injector.inject(fn)
 
-    async def run():
+    async def run() -> T:
         async with injector:
             if inspect.iscoroutinefunction(fn):
-                return await injected()
+                return await injected()  # type: ignore[misc,no-any-return]
 
             return injected()
 

@@ -10,25 +10,25 @@ from starlette.testclient import TestClient
 from tests.conftest import Database, Service
 
 
-def test_app_injection(injector):
+def test_app_injection(injector: DependencyInjector) -> None:
     app = inject_app(FastAPI(), injector=injector)
 
     @app.get(path="/hello-world")
-    def hello_world(service: Provide[Service], some_query: str) -> dict:
+    def hello_world(service: Provide[Service], some_query: str) -> dict[str, str | bool]:  # noqa: FA102
         assert isinstance(service, Service)
-        return {"query": some_query, "is_alive": service.is_alive()}  # type: ignore[attr-defined]
+        return {"query": some_query, "is_alive": service.is_alive()}
 
     with TestClient(app) as client:
         resp = client.get("/hello-world?some_query=my-query")
         assert resp.json() == {"query": "my-query", "is_alive": True}
 
 
-def test_app_injection_with_depends(injector):
+def test_app_injection_with_depends(injector: DependencyInjector) -> None:
     connected_global_dependency = False
 
     class GlobalConnect(Database): ...
 
-    def global_dependency(dep: Provide[GlobalConnect]):
+    def global_dependency(dep: Provide[GlobalConnect]) -> None:
         nonlocal connected_global_dependency
         connected_global_dependency = dep.connected
 
@@ -55,7 +55,7 @@ def test_app_injection_with_depends(injector):
         mw: Provide[MiddlewareNonConnectable],
         *,
         db_connect: bool = Depends(assert_db_connected),
-    ):
+    ) -> str:
         if db_connect:
             return mw.get_creds()
 
@@ -65,9 +65,9 @@ def test_app_injection_with_depends(injector):
     def hello_world(
         service: Provide[Service],
         creds: Annotated[str, Depends(get_creds)],
-    ) -> dict:
+    ) -> dict[str, str | bool]:  # noqa: FA102
         assert isinstance(service, Service)
-        return {"creds": creds, "is_alive": service.is_alive()}  # type: ignore[attr-defined]
+        return {"creds": creds, "is_alive": service.is_alive()}
 
     with TestClient(app) as client:
         resp = client.get("/hello-world?some_query=my-query")
@@ -80,7 +80,7 @@ def test_app_injection_clients_connect(
     injector: DependencyInjector,
     *,
     use_deprecated_events: bool,
-):
+) -> None:
     app = inject_app(
         FastAPI(),
         injector=injector,
@@ -90,12 +90,14 @@ def test_app_injection_clients_connect(
     router = APIRouter()
 
     @router.get(path="/hello-world")
-    def hello_world(service: Provide[Service]) -> dict:
+    def hello_world(service: Provide[Service]) -> dict[str, bool]:  # noqa: FA102
+        assert service.workers
+
         return {
-            "service_connected": service.connected,  # type: ignore[attr-defined]
-            "workers_connected": service.workers.connected,  # type: ignore[union-attr]
-            "repo_connected": service.repo.connected,  # type: ignore[attr-defined]
-            "db_connected": service.repo.db.connected,  # type: ignore[attr-defined]
+            "service_connected": service.connected,
+            "workers_connected": service.workers.connected,
+            "repo_connected": service.repo.connected,
+            "db_connected": service.repo.db.connected,
         }
 
     app.include_router(router)
@@ -118,7 +120,7 @@ def test_app_injection_clients_connect(
     }
 
 
-def test_app_injection_without_registered_injector(injector: DependencyInjector):
+def test_app_injection_without_registered_injector(injector: DependencyInjector) -> None:
     app = FastAPI()
 
     @app.get(path="/hello-world")

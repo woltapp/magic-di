@@ -4,7 +4,10 @@ import functools
 import inspect
 from dataclasses import dataclass
 from threading import Lock
-from typing import Generic, Iterable, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Generic, Iterable, TypeVar, cast
+
+if TYPE_CHECKING:
+    from magic_di import ConnectableProtocol
 
 T = TypeVar("T")
 
@@ -16,11 +19,11 @@ class Dependency(Generic[T]):
 
 
 class SingletonDependencyContainer:
-    def __init__(self):
-        self._deps: dict[type[T], Dependency[T]] = {}
+    def __init__(self) -> None:
+        self._deps: dict[type, Dependency[Any]] = {}
         self._lock: Lock = Lock()
 
-    def add(self, obj: type[T], **kwargs) -> type[T]:
+    def add(self, obj: type[T], **kwargs: Any) -> type[T]:
         with self._lock:
             if dep := self._get(obj):
                 return dep
@@ -44,9 +47,13 @@ class SingletonDependencyContainer:
         with self._lock:
             return self._get(obj)
 
-    def iter_instances(self, *, reverse: bool = False) -> Iterable[tuple[type[T], T]]:
+    def iter_instances(
+        self,
+        *,
+        reverse: bool = False,
+    ) -> Iterable[tuple[type, ConnectableProtocol]]:
         with self._lock:
-            deps_iter: Iterable = list(
+            deps_iter: Iterable[Dependency[Any]] = list(
                 reversed(self._deps.values()) if reverse else self._deps.values(),
             )
 
@@ -59,14 +66,14 @@ class SingletonDependencyContainer:
         return dep.object if dep else None
 
 
-def _wrap(obj: type[T], *args, **kwargs) -> type[T]:
+def _wrap(obj: type[T], *args: Any, **kwargs: Any) -> type[T]:
     if not inspect.isclass(obj):
         partial = functools.wraps(obj)(functools.partial(obj, *args, **kwargs))
         return cast(type[T], partial)
 
-    _instance = None
+    _instance: T | None = None
 
-    def new(_):
+    def new(_: Any) -> T:
         nonlocal _instance
 
         if _instance is not None:

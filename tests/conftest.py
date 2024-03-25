@@ -11,10 +11,10 @@ from magic_di import Connectable, DependencyInjector
 class ConnectableClient(Connectable):
     connected: bool = False
 
-    async def __connect__(self):
+    async def __connect__(self) -> None:
         self.connected = True
 
-    async def __disconnect__(self):
+    async def __disconnect__(self) -> None:
         self.connected = False
 
 
@@ -25,11 +25,11 @@ class AnotherDatabase(ConnectableClient): ...
 
 
 class Repository(ConnectableClient):
-    def __init__(self, db: Database, some_params: int = 1):
+    def __init__(self, db: Database, some_params: int = 1) -> None:
         self.db = db
-        self.some_params = 1
+        self.some_params = some_params
 
-    async def do_something(self):
+    async def do_something(self) -> bool:
         await asyncio.sleep(0.1)
         return self.connected and self.db.connected
 
@@ -42,7 +42,8 @@ class Service(ConnectableClient):
     repo: Repository
     workers: AsyncWorkers | None
 
-    def is_alive(self):
+    def is_alive(self) -> bool:
+        assert self.workers
         return self.repo.connected and self.workers.connected
 
 

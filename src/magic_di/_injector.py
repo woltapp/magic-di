@@ -10,6 +10,8 @@ from typing import (
     Any,
     Callable,
     Iterable,
+    Iterator,
+    Self,
     TypeVar,
     cast,
     get_origin,
@@ -65,10 +67,10 @@ logger = logging.getLogger("injector")
 class DependencyInjector:
     def __init__(
         self,
-        bindings: dict | None = None,
+        bindings: dict[type, type] | None = None,
         logger: logging.Logger = logger,
     ):
-        self.bindings: dict = bindings or {}
+        self.bindings = bindings or {}
         self.logger: logging.Logger = logger
 
         self._deps = SingletonDependencyContainer()
@@ -88,14 +90,14 @@ class DependencyInjector:
         """
         obj = self._unwrap_type_hint(obj)  # type: ignore[arg-type]
 
-        if dep := self._deps.get(obj):  # type: ignore[arg-type]
+        if dep := self._deps.get(obj):
             return dep
 
         signature = self.inspect(obj)
 
         clients: dict[str, object] = {}
         for name, dep in signature.deps.items():
-            clients[name] = self.inject(dep)()  # type: ignore[misc]
+            clients[name] = self.inject(dep)()
 
         if signature.injector_arg is not None:
             clients[signature.injector_arg] = self
@@ -107,7 +109,7 @@ class DependencyInjector:
 
     def inspect(self, obj: AnyObject) -> Signature[AnyObject]:
         try:
-            hints = get_type_hints(obj)
+            hints: dict[str, type[Any]] = get_type_hints(obj)
             hints_with_extras = get_type_hints(obj, include_extras=True)
 
             if not hints:
@@ -138,7 +140,7 @@ class DependencyInjector:
 
         return signature
 
-    async def connect(self):
+    async def connect(self) -> None:
         """
         Connect all injected dependencies
         """
@@ -153,7 +155,7 @@ class DependencyInjector:
                 self.logger.debug("Connecting %s...", cls.__name__)
                 await instance.__connect__()
 
-    async def disconnect(self):
+    async def disconnect(self) -> None:
         """
         Disconnect all injected dependencies
         """
@@ -164,11 +166,11 @@ class DependencyInjector:
                 except Exception:
                     self.logger.exception("Failed to disconnect %s", cls.__name__)
 
-    async def __aenter__(self):
+    async def __aenter__(self) -> Self:
         await self.connect()
         return self
 
-    async def __aexit__(self, *args, **kwargs):
+    async def __aexit__(self, *args: object, **kwargs: Any) -> None:
         await self.disconnect()
 
     def iter_deps(self) -> Iterable[ConnectableProtocol]:
@@ -194,9 +196,9 @@ class DependencyInjector:
             self._postponed.append(obj)  # type: ignore[arg-type]
             # incompatible type "Callable[..., T]"; expected "Callable[..., T]"
 
-        injected = None
+        injected: T | None = None
 
-        def inject():
+        def inject() -> T:
             nonlocal injected
 
             if injected is not None:
@@ -207,7 +209,7 @@ class DependencyInjector:
 
         return cast(type[T], inject)
 
-    def bind(self, bindings: dict[type, type]):
+    def bind(self, bindings: dict[type, type]) -> None:
         """
         Bind new bindings to the injector.
 
@@ -234,7 +236,7 @@ class DependencyInjector:
             self.bindings = self.bindings | bindings
 
     @contextmanager
-    def override(self, bindings: dict[type, type]):
+    def override(self, bindings: dict[type, type]) -> Iterator[None]:
         """
         Temporarily override the bindings and dependencies of the injector.
 

@@ -1,10 +1,12 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import Annotated, Generic, TypeVar
 
 import pytest
-
 from magic_di import Connectable, DependencyInjector, Injectable
 from magic_di.exceptions import InjectionError
+
 from tests.conftest import (
     AnotherDatabase,
     AsyncWorkers,
@@ -18,7 +20,7 @@ from tests.conftest import (
 )
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_class_injection_success(injector):
     injected_service = injector.inject(Service)()
     assert not injected_service.is_alive()
@@ -45,7 +47,7 @@ async def test_class_injection_success(injector):
     assert not injected_service.workers.connected
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_function_injection_success(injector):
     def run_service(service: Service):
         return service
@@ -64,7 +66,7 @@ def test_class_injection_missing_class(injector):
         injector.inject(BrokenService)
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio()
 async def test_class_injection_with_bindings(injector):
     injector.bind({RepoInterface: Repository})
 
@@ -126,7 +128,7 @@ def test_injector_iter_deps(injector):
 
 
 def test_injector_with_metaclass(injector):
-    class _GripServiceMetaClass(type):
+    class _ServiceMetaClass(type):
         def __new__(cls, name: str, bases: tuple[type, ...], attrs: dict) -> type:
             for _ in attrs["__orig_bases__"]:
                 ...
@@ -136,8 +138,7 @@ def test_injector_with_metaclass(injector):
 
     tv = TypeVar("tv")
 
-    class ServiceGeneric(Generic[tv], metaclass=_GripServiceMetaClass):
-        ...
+    class ServiceGeneric(Generic[tv], metaclass=_ServiceMetaClass): ...
 
     @dataclass(frozen=True)
     class WrappedService(ServiceGeneric[Service]):

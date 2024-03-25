@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 import asyncio
 from dataclasses import dataclass
-from typing import Protocol, Union
+from typing import Protocol
 
 import pytest
-
 from magic_di import Connectable, DependencyInjector
 
 
@@ -17,12 +18,10 @@ class ConnectableClient(Connectable):
         self.connected = False
 
 
-class Database(ConnectableClient):
-    ...
+class Database(ConnectableClient): ...
 
 
-class AnotherDatabase(ConnectableClient):
-    ...
+class AnotherDatabase(ConnectableClient): ...
 
 
 class Repository(ConnectableClient):
@@ -35,21 +34,19 @@ class Repository(ConnectableClient):
         return self.connected and self.db.connected
 
 
-class AsyncWorkers(ConnectableClient):
-    ...
+class AsyncWorkers(ConnectableClient): ...
 
 
 @dataclass
 class Service(ConnectableClient):
     repo: Repository
-    workers: Union[AsyncWorkers, None]
+    workers: AsyncWorkers | None
 
     def is_alive(self):
         return self.repo.connected and self.workers.connected
 
 
-class NonConnectableDatabase:
-    ...
+class NonConnectableDatabase: ...
 
 
 @dataclass
@@ -62,8 +59,7 @@ class BrokenService:
     repo: BrokenRepo
 
 
-class RepoInterface(Protocol):
-    ...
+class RepoInterface(Protocol): ...
 
 
 @dataclass

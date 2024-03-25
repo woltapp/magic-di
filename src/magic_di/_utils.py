@@ -1,4 +1,6 @@
-from typing import Any, Type, TypeVar, Union, cast, get_args
+from __future__ import annotations
+
+from typing import Any, TypeVar, Union, cast, get_args
 from typing import get_type_hints as _get_type_hints
 
 from magic_di import ConnectableProtocol
@@ -6,14 +8,14 @@ from magic_di import ConnectableProtocol
 LegacyUnionType = type(Union[object, None])
 
 try:
-    from types import UnionType  # type: ignore
+    from types import UnionType  # type: ignore[import-error]
 except ImportError:
     UnionType = LegacyUnionType  # type: ignore[misc, assignment]
 
 
 T = TypeVar("T")
 
-NONE_TYPE: Type = type(None)
+NONE_TYPE: type = type(None)
 
 
 def is_class(obj: Any) -> bool:
@@ -42,23 +44,22 @@ def get_cls_from_optional(cls: T) -> T:
         return cls
 
     args = get_args(cls)
-    if len(args) != 2:
+
+    optional_type_hint_args_len = 2
+    if len(args) != optional_type_hint_args_len:
         return cast(T, cls)
 
     if NONE_TYPE not in args:
         return cast(T, cls)
 
     for typo in args:
-        try:
-            if not issubclass(typo, NONE_TYPE):
-                return cast(T, typo)
-        except TypeError:
-            ...
+        if not safe_is_subclass(typo, NONE_TYPE):
+            return cast(T, typo)
 
     return cast(T, cls)
 
 
-def safe_is_subclass(sub_cls: Any, cls: Type) -> bool:
+def safe_is_subclass(sub_cls: Any, cls: type) -> bool:
     try:
         return issubclass(sub_cls, cls)
     except TypeError:
@@ -82,7 +83,7 @@ def get_type_hints(obj: Any, *, include_extras=False) -> dict[str, type]:
     try:
         if is_class(obj):
             return _get_type_hints(obj.__init__, include_extras=include_extras)  # type: ignore[misc]
-        else:
-            return _get_type_hints(obj, include_extras=include_extras)
+
+        return _get_type_hints(obj, include_extras=include_extras)
     except TypeError:
         return {}

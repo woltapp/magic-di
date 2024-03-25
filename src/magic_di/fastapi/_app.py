@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import inspect
 from contextlib import asynccontextmanager
 from typing import (
+    TYPE_CHECKING,
     Annotated,
     Any,
     Callable,
@@ -10,9 +13,11 @@ from typing import (
     runtime_checkable,
 )
 
-from fastapi import FastAPI, routing
 from fastapi.params import Depends
 from magic_di._injector import DependencyInjector
+
+if TYPE_CHECKING:
+    from fastapi import FastAPI, routing
 
 
 @runtime_checkable
@@ -35,7 +40,9 @@ def inject_app(
     Inject dependencies into a FastAPI application using the provided injector.
 
     This function sets up the FastAPI application to connect and disconnect the injector
-    at startup and shutdown, respectively. This ensures that all dependencies are properly
+    at startup and shutdown, respectively.
+
+    This ensures that all dependencies are properly
     connected when the application starts, and properly disconnected when the application
     shuts down.
 
@@ -50,8 +57,10 @@ def inject_app(
         use_deprecated_events (bool, optional): Indicate whether the app should be injected
                                                 with starlette events (which are deprecated)
                                                 or use app lifespans.
-                                                Important: Use this flag only if you still use app events,
-                                                because if lifespans are defined, events will be ignored by Starlette.
+                                                Important: Use this flag only
+                                                if you still use app events,
+                                                because if lifespans are defined,
+                                                events will be ignored by Starlette.
 
     Returns:
         FastAPI: The FastAPI application with dependencies injected.
@@ -97,7 +106,8 @@ def _inject_app_with_events(app: FastAPI, collect_deps_fn: Callable) -> None:
 
 
 def _collect_dependencies(
-    injector: DependencyInjector, app_router: routing.APIRouter
+    injector: DependencyInjector,
+    app_router: routing.APIRouter,
 ) -> None:
     """
     It walks through all routers and collects all app dependencies to connect them later
@@ -111,10 +121,11 @@ def _collect_dependencies(
 
     for route in app_router.routes:
         if not isinstance(route, RouterProtocol):
-            raise ValueError(
+            error_msg = (
                 "Unexpected router class. "
                 f"Router must contain .endpoint property with handler function: {route}"
             )
+            raise TypeError(error_msg)
 
         if isinstance(route, FastAPIRouterProtocol):
             for dependencies in route.dependencies:
@@ -133,17 +144,16 @@ def _inspect_and_lazy_inject(obj: object, injector: DependencyInjector) -> None:
 def _find_fastapi_dependencies(dependency: Callable) -> Iterator[Callable]:
     """
     Recursively finds all FastAPI dependencies.
-    It looks for FastAPI’s Depends() in default arguments and in type annotations.
+    It looks for FastAPI's Depends() in default arguments and in type annotations.
     """
     signature = inspect.signature(dependency)
 
     for param in signature.parameters.values():
-        if isinstance(param.default, Depends):
-            if param.default.dependency:
-                yield from _find_fastapi_dependencies(param.default.dependency)
+        if isinstance(param.default, Depends) and param.default.dependency:
+            yield from _find_fastapi_dependencies(param.default.dependency)
 
         type_hint = param.annotation
-        if not get_origin(type_hint) is Annotated:
+        if get_origin(type_hint) is not Annotated:
             continue
 
         for annotation in type_hint.__metadata__:

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import asyncio
 import threading
 from dataclasses import dataclass
@@ -25,7 +27,8 @@ class EventLoopGetter:
 
             self._event_loop = asyncio.get_event_loop()
             self._loop_thread = threading.Thread(
-                target=self._event_loop.run_forever, daemon=True
+                target=self._event_loop.run_forever,
+                daemon=True,
             )
             self._loop_thread.start()
             return self._event_loop

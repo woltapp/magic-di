@@ -1,4 +1,5 @@
 from magic_di.utils import inject_and_run
+
 from tests.conftest import Repository
 
 

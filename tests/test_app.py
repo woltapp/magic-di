@@ -1,12 +1,12 @@
 from typing import Annotated
 
 import pytest
-from starlette.testclient import TestClient
-
 from fastapi import APIRouter, Depends, FastAPI
 from magic_di import DependencyInjector
 from magic_di.fastapi import Provide, inject_app
 from magic_di.fastapi._provide import FastAPIInjectionError
+from starlette.testclient import TestClient
+
 from tests.conftest import Database, Service
 
 
@@ -26,8 +26,7 @@ def test_app_injection(injector):
 def test_app_injection_with_depends(injector):
     connected_global_dependency = False
 
-    class GlobalConnect(Database):
-        ...
+    class GlobalConnect(Database): ...
 
     def global_dependency(dep: Provide[GlobalConnect]):
         nonlocal connected_global_dependency
@@ -43,11 +42,10 @@ def test_app_injection_with_depends(injector):
     class MiddlewareNonConnectable:
         creds: str = "secret_creds"
 
-        def get_creds(self, value: str | None = None) -> str:
+        def get_creds(self, value: str | None = None) -> str:  # noqa: FA102
             return value or self.creds
 
-    class AnotherDatabase(Database):
-        ...
+    class AnotherDatabase(Database): ...
 
     def assert_db_connected(db: Provide[AnotherDatabase]) -> bool:
         assert db.connected
@@ -55,6 +53,7 @@ def test_app_injection_with_depends(injector):
 
     def get_creds(
         mw: Provide[MiddlewareNonConnectable],
+        *,
         db_connect: bool = Depends(assert_db_connected),
     ):
         if db_connect:
@@ -64,7 +63,8 @@ def test_app_injection_with_depends(injector):
 
     @app.get(path="/hello-world", dependencies=[])
     def hello_world(
-        service: Provide[Service], creds: Annotated[str, Depends(get_creds)]
+        service: Provide[Service],
+        creds: Annotated[str, Depends(get_creds)],
     ) -> dict:
         assert isinstance(service, Service)
         return {"creds": creds, "is_alive": service.is_alive()}  # type: ignore[attr-defined]
@@ -77,7 +77,9 @@ def test_app_injection_with_depends(injector):
 
 @pytest.mark.parametrize("use_deprecated_events", [False, True])
 def test_app_injection_clients_connect(
-    injector: DependencyInjector, use_deprecated_events: bool
+    injector: DependencyInjector,
+    *,
+    use_deprecated_events: bool,
 ):
     app = inject_app(
         FastAPI(),
@@ -123,6 +125,5 @@ def test_app_injection_without_registered_injector(injector: DependencyInjector)
     def hello_world(service: Provide[Service]) -> str:
         return "OK"
 
-    with TestClient(app) as client:
-        with pytest.raises(FastAPIInjectionError):
-            client.get("/hello-world")
+    with TestClient(app) as client, pytest.raises(FastAPIInjectionError):
+        client.get("/hello-world")

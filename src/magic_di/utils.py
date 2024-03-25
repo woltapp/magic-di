@@ -1,9 +1,13 @@
+from __future__ import annotations
+
 import asyncio
 import inspect
-from collections.abc import Callable
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from magic_di import DependencyInjector
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 def inject_and_run(fn: Callable, injector: DependencyInjector | None = None) -> Any:
@@ -35,7 +39,7 @@ def inject_and_run(fn: Callable, injector: DependencyInjector | None = None) -> 
         async with injector:
             if inspect.iscoroutinefunction(fn):
                 return await injected()
-            else:
-                return injected()
+
+            return injected()
 
     return asyncio.run(run())

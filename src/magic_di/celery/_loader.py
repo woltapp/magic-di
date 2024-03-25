@@ -1,13 +1,17 @@
+from __future__ import annotations
+
 import asyncio
 import os
 import threading
-from typing import Any, Callable, Protocol, runtime_checkable
+from typing import TYPE_CHECKING, Any, Callable, Protocol, runtime_checkable
 
 from celery import signals
 from celery.loaders.app import AppLoader  # type: ignore[import]
-from celery.loaders.base import BaseLoader
 from magic_di import DependencyInjector
 from magic_di.celery._async_utils import EventLoop, EventLoopGetter, run_in_event_loop
+
+if TYPE_CHECKING:
+    from celery.loaders.base import BaseLoader
 
 
 @runtime_checkable
@@ -15,11 +19,9 @@ class InjectedCeleryLoaderProtocol(Protocol):
     injector: DependencyInjector
     loaded: bool
 
-    def on_worker_process_init(self) -> None:
-        ...
+    def on_worker_process_init(self) -> None: ...
 
-    def get_event_loop(self) -> EventLoop:
-        ...
+    def get_event_loop(self) -> EventLoop: ...
 
 
 def get_celery_loader(
@@ -73,14 +75,13 @@ def get_celery_loader(
             with self._event_loop_lock:
                 if self._event_loop is None:
                     self._event_loop = EventLoop(
-                        _event_loop_getter(), running_outside=False
+                        _event_loop_getter(),
+                        running_outside=False,
                     )
 
                 return self._event_loop
 
-        def _disconnect(
-            self, *args: Any, pid: str, **kwargs: Any
-        ) -> None:  # noqa: ARG004, ANN401
+        def _disconnect(self, *_: Any, pid: str, **__: Any) -> None:
             log_fn(f"Trying to disconnect celery deps for pid {pid}...")
             run_in_event_loop(self.injector.disconnect(), self.get_event_loop())
             log_fn(f"Celery deps are disconnected for pid {pid}")

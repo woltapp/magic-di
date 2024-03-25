@@ -18,8 +18,8 @@
 
 Dependency Injector that makes your life easier with built-in support of FastAPI, Celery (and it can be integrated with everything)
 
-What are the problems with FastAPI’s dependency injector? 
-1) It forces you to use global variables. 
+What are the problems with FastAPI’s dependency injector?
+1) It forces you to use global variables.
 2) You need to write an endless number of fabrics with startup logic
 3) It makes your project highly dependent on FastAPI’s injector by using “Depends” everywhere.
 
@@ -211,7 +211,7 @@ def hello_world(service: Provide[MyInterface]) -> dict:
   }
 ```
 
-Using `injector.bind`, you can bind implementations that will be injected everywhere the bound interface is used. 
+Using `injector.bind`, you can bind implementations that will be injected everywhere the bound interface is used.
 
 ## Integration with Celery
 
@@ -247,22 +247,22 @@ app = Celery(
 class CalculatorTaskDeps(BaseCeleryConnectableDeps):
   calculator: Calculator
 
-  
+
 class CalculatorTask(InjectableCeleryTask):
   deps: CalculatorTaskDeps
-  
+
   async def run(self, x: int, y: int, smart_processor: SmartProcessor = Provide()):
     return smart_processor.process(
       await self.deps.calculator.calculate(x, y)
     )
 
-      
+
 app.register_task(CalculatorTask)
 ```
 
 ### Limitations
-You could notice that in these examples tasks are using Python async/await.  
-`InjectableCeleryTask` provides support for writing async code. However, it still executes code synchronously.   
+You could notice that in these examples tasks are using Python async/await.
+`InjectableCeleryTask` provides support for writing async code. However, it still executes code synchronously.
 **Due to this, getting results from async tasks is not possible in the following cases:**
 * When the `task_always_eager` config flag is enabled and task creation occurs inside the running event loop (e.g., inside an async FastAPI endpoint)
 * When calling the `.apply()` method inside running event loop (e.g., inside an async FastAPI endpoint)
@@ -297,7 +297,7 @@ def client(injector: DependencyInjector, service_mock: InjectableMock):
     with TestClient(app) as client:
         yield client
 
-  
+
 def test_http_handler(client):
   resp = client.post('/hello-world')
 

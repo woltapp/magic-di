@@ -10,8 +10,7 @@ from magic_di.celery._async_utils import EventLoop, run_in_event_loop
 from magic_di.celery._loader import InjectedCeleryLoaderProtocol
 
 
-class BaseCeleryConnectableDeps(Connectable):
-    ...
+class BaseCeleryConnectableDeps(Connectable): ...
 
 
 class InjectableCeleryTaskMetaclass(type):
@@ -49,10 +48,11 @@ class InjectableCeleryTask(Task, Connectable, metaclass=InjectableCeleryTaskMeta
             return
 
         if not self.injector:
-            raise ValueError(
+            error_msg = (
                 "Celery is not injected by magic_di.celery.get_celery_loader "
                 "and injector or deps_instance is not passed in task args"
             )
+            raise ValueError(error_msg)
 
         for dep in self.injector.inspect(self.run).deps.values():
             self.injector.lazy_inject(dep)
@@ -69,7 +69,8 @@ class InjectableCeleryTask(Task, Connectable, metaclass=InjectableCeleryTaskMeta
 
         if isinstance(self.app.loader, InjectedCeleryLoaderProtocol):
             loader: InjectedCeleryLoaderProtocol = cast(
-                InjectedCeleryLoaderProtocol, self.app.loader
+                InjectedCeleryLoaderProtocol,
+                self.app.loader,
             )
 
             return loader.injector
@@ -79,7 +80,8 @@ class InjectableCeleryTask(Task, Connectable, metaclass=InjectableCeleryTaskMeta
     def load(self) -> None:
         if isinstance(self.app.loader, InjectedCeleryLoaderProtocol):
             loader: InjectedCeleryLoaderProtocol = cast(
-                InjectedCeleryLoaderProtocol, self.app.loader
+                InjectedCeleryLoaderProtocol,
+                self.app.loader,
             )
             return loader.on_worker_process_init()
 
@@ -91,14 +93,16 @@ class InjectableCeleryTask(Task, Connectable, metaclass=InjectableCeleryTaskMeta
             return True
 
         loader: InjectedCeleryLoaderProtocol = cast(
-            InjectedCeleryLoaderProtocol, self.app.loader
+            InjectedCeleryLoaderProtocol,
+            self.app.loader,
         )
         return loader.loaded
 
     def get_event_loop(self) -> EventLoop | None:
         if isinstance(self.app.loader, InjectedCeleryLoaderProtocol):
             loader: InjectedCeleryLoaderProtocol = cast(
-                InjectedCeleryLoaderProtocol, self.app.loader
+                InjectedCeleryLoaderProtocol,
+                self.app.loader,
             )
 
             return loader.get_event_loop()
@@ -108,14 +112,11 @@ class InjectableCeleryTask(Task, Connectable, metaclass=InjectableCeleryTaskMeta
     @staticmethod
     def run_wrapper(orig_run: Callable) -> Callable:
         @wraps(orig_run)
-        def runner(self: "InjectableCeleryTask", *args, **kwargs) -> Any:
+        def runner(self: InjectableCeleryTask, *args, **kwargs) -> Any:
             if not self.loaded:
                 self.load()
 
-            if self.injector:
-                run = self.injector.inject(orig_run)
-            else:
-                run = orig_run
+            run = self.injector.inject(orig_run) if self.injector else orig_run
 
             if "self" in inspect.signature(run).parameters:
                 args = (self, *args)
@@ -125,9 +126,11 @@ class InjectableCeleryTask(Task, Connectable, metaclass=InjectableCeleryTaskMeta
             if inspect.isawaitable(result):
                 event_loop = self.get_event_loop()
                 if not event_loop:
-                    raise ValueError(
-                        "Cannot run async tasks. Celery is not injected by magic_di.celery.get_celery_loader"
+                    error_msg = (
+                        "Cannot run async tasks. "
+                        "Celery is not injected by magic_di.celery.get_celery_loader"
                     )
+                    raise ValueError(error_msg)
 
                 return run_in_event_loop(
                     result,  # type: ignore[arg-type]

@@ -8,9 +8,9 @@ authors = [
 license = "MIT"
 readme = "README.md"
 
-documentation = "https://RB387.github.io/magic-di"
-homepage = "https://RB387.github.io/magic-di"
-repository = "https://github.com/RB387/magic-di"
+documentation = "https://woltapp.github.io/magic-di"
+homepage = "https://woltapp.github.io/magic-di"
+repository = "https://github.com/woltapp/magic-di"
 
 classifiers = [
   "Development Status :: 4 - Beta",

@@ -3,7 +3,6 @@ from __future__ import annotations
 import asyncio
 import os
 import threading
-from collections.abc import Callable
 from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
 
 from celery import signals
@@ -13,6 +12,8 @@ from magic_di import DependencyInjector
 from magic_di.celery._async_utils import EventLoop, EventLoopGetter, run_in_event_loop
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from celery.loaders.base import BaseLoader
 
 

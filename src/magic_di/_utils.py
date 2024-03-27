@@ -1,16 +1,16 @@
 from __future__ import annotations
 
-from typing import Any, TypeVar, Union, cast, get_args
+from typing import Any, TypeVar, cast, get_args
 from typing import get_type_hints as _get_type_hints
 
 from magic_di import ConnectableProtocol
 
-LegacyUnionType = type(Union[object, None])
+LegacyUnionType = type(object | None)
 
 try:
     from types import UnionType  # type: ignore[import-error,unused-ignore]
 except ImportError:
-    UnionType = LegacyUnionType  # type: ignore[misc, assignment]
+    UnionType = LegacyUnionType  # type: ignore[misc]
 
 
 T = TypeVar("T")
@@ -40,7 +40,7 @@ def get_cls_from_optional(cls: T) -> T:
     Returns:
         T: Extracted class
     """
-    if not isinstance(cls, (UnionType, LegacyUnionType)):
+    if not isinstance(cls, UnionType | LegacyUnionType):
         return cls
 
     args = get_args(cls)

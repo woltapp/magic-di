@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import inspect
 import logging
-from collections.abc import Callable, Iterable, Iterator
 from contextlib import contextmanager
 from threading import Lock
 from typing import (
@@ -25,6 +24,8 @@ from magic_di._utils import (
 from magic_di.exceptions import InjectionError, InspectionError
 
 if TYPE_CHECKING:
+    from collections.abc import Callable, Iterable, Iterator
+
     from magic_di._connectable import ConnectableProtocol
 
 # flag to use in typing.Annotated

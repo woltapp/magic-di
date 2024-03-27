@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import inspect
-from collections.abc import AsyncIterator, Callable, Iterator
 from contextlib import asynccontextmanager
 from typing import (
     TYPE_CHECKING,
@@ -17,6 +16,8 @@ from fastapi.params import Depends
 from magic_di._injector import DependencyInjector
 
 if TYPE_CHECKING:
+    from collections.abc import AsyncIterator, Callable, Iterator
+
     from fastapi import FastAPI, routing
 
 

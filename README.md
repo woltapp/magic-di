@@ -37,7 +37,17 @@ Dependency Injector with minimal boilerplate code, built-in support for FastAPI 
 
 ## Install
 ```bash
+pip install magic-di
+```
+
+With FastAPI integration:
+```bash
 pip install 'magic-di[fastapi]'
+```
+
+With Celery integration:
+```bash
+pip install 'magic-di[celery]'
 ```
 
 ## Getting Started

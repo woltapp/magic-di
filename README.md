@@ -332,7 +332,7 @@ def client(injector: DependencyInjector, service_mock: Service):
 * Create a virtual environment and install the dependencies
 
 ```sh
-poetry install
+poetry install --all-extras
 ```
 
 * Activate the virtual environment

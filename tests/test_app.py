@@ -14,7 +14,7 @@ def test_app_injection(injector: DependencyInjector) -> None:
     app = inject_app(FastAPI(), injector=injector)
 
     @app.get(path="/hello-world")
-    def hello_world(service: Provide[Service], some_query: str) -> dict[str, str | bool]:  # noqa: FA102
+    def hello_world(service: Provide[Service], some_query: str) -> dict[str, str | bool]:
         assert isinstance(service, Service)
         return {"query": some_query, "is_alive": service.is_alive()}
 
@@ -42,7 +42,7 @@ def test_app_injection_with_depends(injector: DependencyInjector) -> None:
     class MiddlewareNonConnectable:
         creds: str = "secret_creds"
 
-        def get_creds(self, value: str | None = None) -> str:  # noqa: FA102
+        def get_creds(self, value: str | None = None) -> str:
             return value or self.creds
 
     class AnotherDatabase(Database): ...
@@ -65,7 +65,7 @@ def test_app_injection_with_depends(injector: DependencyInjector) -> None:
     def hello_world(
         service: Provide[Service],
         creds: Annotated[str, Depends(get_creds)],
-    ) -> dict[str, str | bool]:  # noqa: FA102
+    ) -> dict[str, str | bool]:
         assert isinstance(service, Service)
         return {"creds": creds, "is_alive": service.is_alive()}
 
@@ -90,7 +90,7 @@ def test_app_injection_clients_connect(
     router = APIRouter()
 
     @router.get(path="/hello-world")
-    def hello_world(service: Provide[Service]) -> dict[str, bool]:  # noqa: FA102
+    def hello_world(service: Provide[Service]) -> dict[str, bool]:
         assert service.workers
 
         return {

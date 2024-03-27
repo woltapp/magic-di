@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import asyncio
 import threading
+from collections.abc import Coroutine
 from dataclasses import dataclass
-from typing import Any, Coroutine, TypeVar
+from typing import Any, TypeVar
 
 R = TypeVar("R")
 

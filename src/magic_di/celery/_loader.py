@@ -3,7 +3,8 @@ from __future__ import annotations
 import asyncio
 import os
 import threading
-from typing import TYPE_CHECKING, Any, Callable, Protocol, runtime_checkable
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
 
 from celery import signals
 from celery.loaders.app import AppLoader  # type: ignore[import-untyped]

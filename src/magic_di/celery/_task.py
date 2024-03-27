@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import inspect
+from collections.abc import Callable
 from functools import wraps
-from typing import Any, Callable, cast, get_type_hints
+from typing import Any, cast, get_type_hints
 
 from celery.app.task import Task
 

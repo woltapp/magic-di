@@ -1,14 +1,12 @@
 from __future__ import annotations
 
 import inspect
+from collections.abc import AsyncIterator, Callable, Iterator
 from contextlib import asynccontextmanager
 from typing import (
     TYPE_CHECKING,
     Annotated,
     Any,
-    AsyncIterator,
-    Callable,
-    Iterator,
     Protocol,
     get_origin,
     runtime_checkable,

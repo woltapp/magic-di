@@ -2,15 +2,13 @@ from __future__ import annotations
 
 import inspect
 import logging
+from collections.abc import Callable, Iterable, Iterator
 from contextlib import contextmanager
 from threading import Lock
 from typing import (
     TYPE_CHECKING,
     Annotated,
     Any,
-    Callable,
-    Iterable,
-    Iterator,
     TypeVar,
     cast,
     get_origin,

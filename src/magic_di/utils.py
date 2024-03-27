@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import asyncio
 import inspect
-from typing import TYPE_CHECKING, Awaitable, TypeVar, overload
+from collections.abc import Awaitable
+from typing import TYPE_CHECKING, TypeVar, overload
 
 from magic_di import DependencyInjector
 

@@ -66,6 +66,13 @@ def safe_is_subclass(sub_cls: Any, cls: type) -> bool:
         return False
 
 
+def safe_is_instance(sub_cls: Any, cls: type) -> bool:
+    try:
+        return isinstance(sub_cls, cls)
+    except TypeError:
+        return False
+
+
 def is_injectable(cls: Any) -> bool:
     """
     Check if a class is a subclass of ConnectableProtocol.
@@ -76,7 +83,7 @@ def is_injectable(cls: Any) -> bool:
     Returns:
         bool: True if the class is a subclass of ConnectableProtocol, False otherwise.
     """
-    return safe_is_subclass(cls, ConnectableProtocol)
+    return safe_is_subclass(cls, ConnectableProtocol) or safe_is_instance(cls, ConnectableProtocol)
 
 
 def get_type_hints(obj: Any, *, include_extras: bool = False) -> dict[str, type]:

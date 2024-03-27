@@ -95,13 +95,7 @@ def _wrap(obj: type[T], *args: Any, **kwargs: Any) -> type[T]:
     #   >>> injected_redis()  # works
     #   >>> injected_redis(timeout=10)  # doesn't work
     #
-    # Here we manually create a new class using the `type` metaclass
-    # to prevent possible overrides of it.
-    # We copy all object attributes (__dict__)
-    # so that upon inspection,
-    # the class should look exactly like the wrapped class.
-    # However, we override the __new__ method
-    # to return an instance of the original class.
+    # Here we manually create a new singleton class factory using the `type` metaclass
     # Since the original class was not modified, it will use its own metaclass.
     return functools.wraps(
         obj,
@@ -109,10 +103,7 @@ def _wrap(obj: type[T], *args: Any, **kwargs: Any) -> type[T]:
     )(
         type(
             obj.__name__,
-            (obj,),
-            {
-                **obj.__dict__,
-                "__new__": new,
-            },
+            (),
+            {"__new__": new},
         ),
     )

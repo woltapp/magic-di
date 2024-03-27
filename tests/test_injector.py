@@ -155,3 +155,14 @@ def test_injector_flag_injectable(injector: DependencyInjector) -> None:
 
     injected = injector.inject(ServiceWithNonConnectable)()
     assert isinstance(injected.db, NonConnectableDatabase)
+
+
+def test_injector_pydantic_metaclass_doesnt_break(injector: DependencyInjector) -> None:
+    from pydantic import BaseModel
+
+    class PydanticClass(BaseModel, Connectable):
+        var: int = 1
+
+    injected = injector.inject(PydanticClass)()
+    assert isinstance(injected, PydanticClass)
+    assert injected.var == 1

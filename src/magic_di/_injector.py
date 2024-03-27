@@ -150,7 +150,7 @@ class DependencyInjector:
             self.inject(postponed)
 
         for cls, instance in self._deps.iter_instances():
-            if is_injectable(cls):
+            if is_injectable(instance):
                 self.logger.debug("Connecting %s...", cls.__name__)
                 await instance.__connect__()
 
@@ -159,7 +159,7 @@ class DependencyInjector:
         Disconnect all injected dependencies
         """
         for cls, instance in self._deps.iter_instances(reverse=True):
-            if is_injectable(cls):
+            if is_injectable(instance):
                 try:
                     await instance.__disconnect__()
                 except Exception:

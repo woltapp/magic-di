@@ -19,7 +19,6 @@
 Dependency Injector with minimal boilerplate code, built-in support for FastAPI and Celery, and seamless integration to basically anything.
 
 ## Contents
-* [Alternatives](#alternatives)
 * [Install](#install)
 * [Getting Started](#getting-started)
 * [Clients Configuration](#clients-configuration)
@@ -32,23 +31,8 @@ Dependency Injector with minimal boilerplate code, built-in support for FastAPI 
 * [Testing](#testing)
   * [Default simple mock](#default-simple-mock)
   * [Custom mocks](#custom-mocks)
+* [Alternatives](#alternatives)
 * [Development](#development)
-
-
-## Alternatives
-
-### [FastAPI's built-in dependency injection](https://fastapi.tiangolo.com/tutorial/dependencies/)
-
-FastAPI's built-in DI is great, but it makes the project (and its business logic) dependent on FastAPI, `fastapi.Depends` specifically.
-
-`magic-di` decouples DI from other dependencies while still offering seamless integration to FastAPI, for example.
-
-### [python-dependency-injector](https://github.com/ets-labs/python-dependency-injector)
-
-[python-dependency-injector](https://github.com/ets-labs/python-dependency-injector) is great, but it requires a notable amount of boilerplate code.
-
-The goal of `magic-di` is to __reduce the amount of code as much as possible__ and get rid of enterprise code with countless configs, containers, and fabrics.
-The philosophy of `magic-di` is that clients know how to configure themselves and perform all startup routines.
 
 
 ## Install
@@ -329,6 +313,22 @@ def client(injector: DependencyInjector, service_mock: Service):
     with TestClient(app) as client:
         yield client
 ```
+
+## Alternatives
+
+### [FastAPI's built-in dependency injection](https://fastapi.tiangolo.com/tutorial/dependencies/)
+
+FastAPI's built-in DI is great, but it makes the project (and its business logic) dependent on FastAPI, `fastapi.Depends` specifically.
+
+`magic-di` decouples DI from other dependencies while still offering seamless integration to FastAPI, for example.
+
+### [python-dependency-injector](https://github.com/ets-labs/python-dependency-injector)
+
+[python-dependency-injector](https://github.com/ets-labs/python-dependency-injector) is great, but it requires a notable amount of boilerplate code.
+
+The goal of `magic-di` is to __reduce the amount of code as much as possible__ and get rid of enterprise code with countless configs, containers, and fabrics.
+The philosophy of `magic-di` is that clients know how to configure themselves and perform all startup routines.
+
 
 ## Development
 

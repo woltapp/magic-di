@@ -6,9 +6,6 @@ from typing import (
     TYPE_CHECKING,
     Annotated,
     Any,
-    AsyncIterator,
-    Callable,
-    Iterator,
     Protocol,
     get_origin,
     runtime_checkable,
@@ -19,6 +16,8 @@ from fastapi.params import Depends
 from magic_di._injector import DependencyInjector
 
 if TYPE_CHECKING:
+    from collections.abc import AsyncIterator, Callable, Iterator
+
     from fastapi import FastAPI, routing
 
 

@@ -6,7 +6,7 @@
     "cookiecutter": {
       "author_name": "Nikita Zavadin",
       "author_email": "nikita.zavadin@wolt.com",
-      "github_username": "RB387",
+      "github_username": "woltapp",
       "project_name": "magic-di",
       "project_slug": "magic-di",
       "package_name": "magic_di",

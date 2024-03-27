@@ -1,9 +1,10 @@
 import contextlib
 import tempfile
+from collections.abc import Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass
 from threading import Thread
-from typing import Any, Iterator, cast
+from typing import Any, cast
 from unittest.mock import MagicMock, call
 
 import pytest
@@ -57,7 +58,7 @@ def service_ping_task(celery_app: Celery) -> InjectableCeleryTask:
         arg1: int,
         arg2: str,
         service: Service = PROVIDE,
-    ) -> tuple[int, str, bool]:  # noqa: FA102
+    ) -> tuple[int, str, bool]:
         return arg1, arg2, service.is_alive()
 
     return cast(InjectableCeleryTask, service_ping)
@@ -70,7 +71,7 @@ def service_ping_task_sync(celery_app: Celery) -> InjectableCeleryTask:
         arg1: int,
         arg2: str,
         service: Service = PROVIDE,
-    ) -> tuple[int, str, bool]:  # noqa: FA102
+    ) -> tuple[int, str, bool]:
         return arg1, arg2, service.is_alive()
 
     return cast(InjectableCeleryTask, service_ping_sync)
@@ -85,7 +86,7 @@ def service_ping_class_based_task(celery_app: Celery) -> InjectableCeleryTask:
     class SyncServicePingTask(InjectableCeleryTask):
         deps: Deps
 
-        async def run(self, arg1: int, arg2: str) -> tuple[int, str, bool]:  # noqa: FA102
+        async def run(self, arg1: int, arg2: str) -> tuple[int, str, bool]:
             return arg1, arg2, self.deps.db.connected
 
     return SyncServicePingTask()
@@ -100,7 +101,7 @@ def service_ping_class_based_task_sync(celery_app: Celery) -> InjectableCeleryTa
     class ServicePingTask(InjectableCeleryTask):
         deps: Deps
 
-        def run(self, arg1: int, arg2: str) -> tuple[int, str, bool]:  # noqa: FA102
+        def run(self, arg1: int, arg2: str) -> tuple[int, str, bool]:
             return arg1, arg2, self.deps.db.connected
 
     return ServicePingTask()
@@ -266,7 +267,7 @@ async def test_async_function_based_tasks_inside_event_loop(
     *,
     task_always_eager: bool,
     use_broker_and_backend: bool,
-    expected_mock_calls: list[Any],  # noqa: FA102
+    expected_mock_calls: list[Any],
 ) -> None:
     injector = DependencyInjector()
 
@@ -280,14 +281,14 @@ async def test_async_function_based_tasks_inside_event_loop(
             arg1: int,
             arg2: str,
             service: Service = PROVIDE,
-        ) -> tuple[int, str, bool]:  # noqa: FA102
+        ) -> tuple[int, str, bool]:
             mock()
             return arg1, arg2, service.is_alive()
 
         fastapi_app = FastAPI()
 
         @fastapi_app.get("/")
-        async def handler() -> dict[str, bool]:  # noqa: FA102
+        async def handler() -> dict[str, bool]:
             ping_task.apply_async(args=(1337, "leet"))
             ping_task.apply(args=(1337, "leet-2"))
             return {"ok": True}

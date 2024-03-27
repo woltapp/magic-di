@@ -16,19 +16,9 @@
 
 ---
 
-Dependency Injector that makes your life easier with built-in support of FastAPI, Celery (and it can be integrated with everything)
+Dependency Injector with minimal boilerplate code, built-in support for FastAPI and Celery, and seamless integration to basically anything.
 
-What are the problems with FastAPI’s dependency injector?
-1) It forces you to use global variables.
-2) You need to write an endless number of fabrics with startup logic
-3) It makes your project highly dependent on FastAPI’s injector by using “Depends” everywhere.
-
-To solve these problems, you can use this dead-simple Dependency Injector that will make development so much easier.
-
-__Q: But why not to use [python-dependency-injector](https://github.com/ets-labs/python-dependency-injector) or other libs?__
-
-A: The goal of this Dependency Injector is to __reduce the amount of code as much as possible__ and get rid of enterprise code with millions of configs, containers, and fabrics. That’s why python-dependency-injector and similar libraries are overkill. The philosophy of this injector is that clients know how to configure themselves and perform all startup routines.
-
+## Contents
 * [Install](#install)
 * [Getting Started](#getting-started)
 * [Clients Configuration](#clients-configuration)
@@ -41,12 +31,23 @@ A: The goal of this Dependency Injector is to __reduce the amount of code as muc
 * [Testing](#testing)
   * [Default simple mock](#default-simple-mock)
   * [Custom mocks](#custom-mocks)
+* [Alternatives](#alternatives)
 * [Development](#development)
 
 
 ## Install
 ```bash
+pip install magic-di
+```
+
+With FastAPI integration:
+```bash
 pip install 'magic-di[fastapi]'
+```
+
+With Celery integration:
+```bash
+pip install 'magic-di[celery]'
 ```
 
 ## Getting Started
@@ -323,16 +324,32 @@ def client(injector: DependencyInjector, service_mock: Service):
         yield client
 ```
 
+## Alternatives
+
+### [FastAPI's built-in dependency injection](https://fastapi.tiangolo.com/tutorial/dependencies/)
+
+FastAPI's built-in DI is great, but it makes the project (and its business logic) dependent on FastAPI, `fastapi.Depends` specifically.
+
+`magic-di` decouples DI from other dependencies while still offering seamless integration to FastAPI, for example.
+
+### [python-dependency-injector](https://github.com/ets-labs/python-dependency-injector)
+
+[python-dependency-injector](https://github.com/ets-labs/python-dependency-injector) is great, but it requires a notable amount of boilerplate code.
+
+The goal of `magic-di` is to __reduce the amount of code as much as possible__ and get rid of enterprise code with countless configs, containers, and fabrics.
+The philosophy of `magic-di` is that clients know how to configure themselves and perform all startup routines.
+
+
 ## Development
 
 * Clone this repository
 * Requirements:
   * [Poetry](https://python-poetry.org/)
-  * Python 3.8+
+  * Python 3.10+
 * Create a virtual environment and install the dependencies
 
 ```sh
-poetry install
+poetry install --all-extras
 ```
 
 * Activate the virtual environment
@@ -349,17 +366,17 @@ pytest
 
 ### Documentation
 
-The documentation is automatically generated from the content of the [docs directory](https://github.com/RB387/magic-di/tree/master/docs) and from the docstrings
+The documentation is automatically generated from the content of the [docs directory](https://github.com/woltapp/magic-di/tree/master/docs) and from the docstrings
  of the public signatures of the source code. The documentation is updated and published as a [Github Pages page](https://pages.github.com/) automatically as part each release.
 
 ### Releasing
 
-Trigger the [Draft release workflow](https://github.com/RB387/magic-di/actions/workflows/draft_release.yml)
+Trigger the [Draft release workflow](https://github.com/woltapp/magic-di/actions/workflows/draft_release.yml)
 (press _Run workflow_). This will update the changelog & version and create a GitHub release which is in _Draft_ state.
 
 Find the draft release from the
-[GitHub releases](https://github.com/RB387/magic-di/releases) and publish it. When
- a release is published, it'll trigger [release](https://github.com/RB387/magic-di/blob/master/.github/workflows/release.yml) workflow which creates PyPI
+[GitHub releases](https://github.com/woltapp/magic-di/releases) and publish it. When
+ a release is published, it'll trigger [release](https://github.com/woltapp/magic-di/blob/master/.github/workflows/release.yml) workflow which creates PyPI
  release and deploys updated documentation.
 
 ### Pre-commit

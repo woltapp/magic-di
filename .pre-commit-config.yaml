@@ -23,7 +23,6 @@ repos:
         types: [ python ]
       - id: ruff
         name: ruff
-        # Add --fix, in case you want it to autofix when this hook runs
         entry: poetry run ruff check --fix --force-exclude
         require_serial: true
         language: system

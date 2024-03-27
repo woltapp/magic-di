@@ -2,12 +2,12 @@ from __future__ import annotations
 
 import asyncio
 import inspect
-from typing import TYPE_CHECKING, Awaitable, TypeVar, overload
+from typing import TYPE_CHECKING, TypeVar, overload
 
 from magic_di import DependencyInjector
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+    from collections.abc import Awaitable, Callable
 
 
 T = TypeVar("T")

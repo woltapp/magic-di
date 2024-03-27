@@ -2,13 +2,16 @@ from __future__ import annotations
 
 import inspect
 from functools import wraps
-from typing import Any, Callable, cast, get_type_hints
+from typing import TYPE_CHECKING, Any, cast, get_type_hints
 
 from celery.app.task import Task
 
 from magic_di import Connectable, DependencyInjector
 from magic_di.celery._async_utils import EventLoop, run_in_event_loop
 from magic_di.celery._loader import InjectedCeleryLoaderProtocol
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 class BaseCeleryConnectableDeps(Connectable): ...

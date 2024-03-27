@@ -4,9 +4,11 @@ import functools
 import inspect
 from dataclasses import dataclass
 from threading import Lock
-from typing import TYPE_CHECKING, Any, Generic, Iterable, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Generic, TypeVar, cast
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
     from magic_di import ConnectableProtocol
 
 T = TypeVar("T")

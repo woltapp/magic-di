@@ -8,9 +8,6 @@ from typing import (
     TYPE_CHECKING,
     Annotated,
     Any,
-    Callable,
-    Iterable,
-    Iterator,
     TypeVar,
     cast,
     get_origin,
@@ -27,6 +24,8 @@ from magic_di._utils import (
 from magic_di.exceptions import InjectionError, InspectionError
 
 if TYPE_CHECKING:
+    from collections.abc import Callable, Iterable, Iterator
+
     from magic_di._connectable import ConnectableProtocol
 
 # flag to use in typing.Annotated

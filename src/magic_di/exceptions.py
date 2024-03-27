@@ -1,5 +1,6 @@
 import inspect
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 from magic_di._signature import Signature
 from magic_di._utils import get_type_hints

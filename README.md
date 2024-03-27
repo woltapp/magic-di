@@ -335,7 +335,7 @@ The philosophy of `magic-di` is that clients know how to configure themselves an
 * Clone this repository
 * Requirements:
   * [Poetry](https://python-poetry.org/)
-  * Python 3.8+
+  * Python 3.10+
 * Create a virtual environment and install the dependencies
 
 ```sh

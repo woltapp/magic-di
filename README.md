@@ -218,7 +218,7 @@ Using `injector.bind`, you can bind implementations that will be injected everyw
 ### Function based celery tasks
 ```python
 from celery import Celery
-from magic_di.celery import get_celery_loader, InjectableCeleryTask, Provide
+from magic_di.celery import get_celery_loader, InjectableCeleryTask, PROVIDE
 
 app = Celery(
     loader=get_celery_loader(),
@@ -227,7 +227,7 @@ app = Celery(
 
 
 @app.task
-async def calculate(x: int, y: int, calculator: Calculator = Provide()):
+async def calculate(x: int, y: int, calculator: Calculator = PROVIDE):
     await calculator.calculate(x, y)
 ```
 
@@ -236,7 +236,7 @@ async def calculate(x: int, y: int, calculator: Calculator = Provide()):
 ```python
 from dataclasses import dataclass
 from celery import Celery
-from magic_di.celery import get_celery_loader, InjectableCeleryTask, BaseCeleryConnectableDeps, Provide
+from magic_di.celery import get_celery_loader, InjectableCeleryTask, BaseCeleryConnectableDeps, PROVIDE
 
 app = Celery(
     loader=get_celery_loader(),
@@ -251,7 +251,7 @@ class CalculatorTaskDeps(BaseCeleryConnectableDeps):
 class CalculatorTask(InjectableCeleryTask):
   deps: CalculatorTaskDeps
 
-  async def run(self, x: int, y: int, smart_processor: SmartProcessor = Provide()):
+  async def run(self, x: int, y: int, smart_processor: SmartProcessor = PROVIDE):
     return smart_processor.process(
       await self.deps.calculator.calculate(x, y)
     )

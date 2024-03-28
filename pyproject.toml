@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "magic-di"
-version = "0.0.1"
+version = "0.1.0"
 description = "Dependency Injector that makes your life easier with built-in support of FastAPI, Celery (but it can be integrated with everything)"
 authors = [
     "Nikita Zavadin <nikita.zavadin@wolt.com>",

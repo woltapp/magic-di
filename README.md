@@ -54,6 +54,7 @@ pip install 'magic-di[celery]'
 
 ```python
 from fastapi import FastAPI
+
 from magic_di import Connectable
 from magic_di.fastapi import inject_app, Provide
 
@@ -61,29 +62,28 @@ app = inject_app(FastAPI())
 
 
 class Database:
-  connected: bool = False
+    connected: bool = False
 
-  def __connect__(self):
-    self.connected = True
+    def __connect__(self):
+        self.connected = True
 
-  def __disconnect__(self):
-    self.connected = False
+    def __disconnect__(self):
+        self.connected = False
 
 
 class Service(Connectable):
-  def __init__(self, db: Database):
-    self.db = db
+    def __init__(self, db: Database):
+        self.db = db
 
-  def is_connected(self):
-    return self.db.connected
+    def is_connected(self):
+        return self.db.connected
 
 
 @app.get(path="/hello-world")
 def hello_world(service: Provide[Service]) -> dict:
-  return {
-    "is_connected": service.is_connected()
-  }
-
+    return {
+        "is_connected": service.is_connected()
+    }
 ```
 
 That's all!
@@ -107,32 +107,32 @@ Simply fetch everything needed from the environment. There is no need for an add
 
 ```python
 from dataclasses import dataclass, field
+
 from pydantic import Field
 from pydantic_settings import BaseSettings
-
 from redis.asyncio import Redis as RedisClient, from_url
 
 
 class RedisConfig(BaseSettings):
-  url: str = Field(validation_alias='REDIS_URL')
-  decode_responses: bool = Field(validation_alias='REDIS_DECODE_RESPONSES')
+    url: str = Field(validation_alias='REDIS_URL')
+    decode_responses: bool = Field(validation_alias='REDIS_DECODE_RESPONSES')
 
 
 @dataclass
 class Redis:
-  config: RedisConfig = field(default_factory=RedisConfig)
-  client: RedisClient = field(init=False)
+    config: RedisConfig = field(default_factory=RedisConfig)
+    client: RedisClient = field(init=False)
 
-  async def __connect__(self):
-    self.client = await from_url(self.config.url, decode_responses=self.config.decode_responses)
-    await self.client.ping()
+    async def __connect__(self):
+        self.client = await from_url(self.config.url, decode_responses=self.config.decode_responses)
+        await self.client.ping()
 
-  async def __disconnect__(self):
-    await self.client.close()
+    async def __disconnect__(self):
+        await self.client.close()
 
-  @property
-  def db(self) -> RedisClient:
-    return self.client
+    @property
+    def db(self) -> RedisClient:
+        return self.client
 
 
 Redis()  # works even without passing arguments in the constructor.
@@ -142,40 +142,41 @@ As an alternative, you can inject configs instead of using default factories.
 
 ```python
 from dataclasses import dataclass, field
+
 from pydantic import Field
 from pydantic_settings import BaseSettings
-from magic_di import Connectable, DependencyInjector
-
 from redis.asyncio import Redis as RedisClient, from_url
+
+from magic_di import Connectable, DependencyInjector
 
 
 class RedisConfig(Connectable, BaseSettings):
-  url: str = Field(validation_alias='REDIS_URL')
-  decode_responses: bool = Field(validation_alias='REDIS_DECODE_RESPONSES')
+    url: str = Field(validation_alias='REDIS_URL')
+    decode_responses: bool = Field(validation_alias='REDIS_DECODE_RESPONSES')
 
 
 @dataclass
 class Redis:
-  config: RedisConfig
-  client: RedisClient = field(init=False)
+    config: RedisConfig
+    client: RedisClient = field(init=False)
 
-  async def __connect__(self):
-    self.client = await from_url(self.config.url, decode_responses=self.config.decode_responses)
-    await self.client.ping()
+    async def __connect__(self):
+        self.client = await from_url(self.config.url, decode_responses=self.config.decode_responses)
+        await self.client.ping()
 
-  async def __disconnect__(self):
-    await self.client.close()
+    async def __disconnect__(self):
+        await self.client.close()
 
-  @property
-  def db(self) -> RedisClient:
-    return self.client
+    @property
+    def db(self) -> RedisClient:
+        return self.client
 
 
 injector = DependencyInjector()
 redis = injector.inject(Redis)()  # works even without passing arguments in the constructor.
 
 async with injector:
-  await redis.db.ping()
+    await redis.db.ping()
 ```
 
 ## Using interfaces instead of implementations
@@ -185,18 +186,19 @@ Sometimes, you may not want to stick to a certain interface implementation every
 from typing import Protocol
 
 from fastapi import FastAPI
+
 from magic_di import Connectable, DependencyInjector
 from magic_di.fastapi import inject_app, Provide
 
 
 class MyInterface(Protocol):
-  def do_something(self) -> bool:
-    ...
+    def do_something(self) -> bool:
+        ...
 
 
 class MyInterfaceImplementation(Connectable):
-  def do_something(self) -> bool:
-    return True
+    def do_something(self) -> bool:
+        return True
 
 
 app = inject_app(FastAPI())
@@ -207,9 +209,9 @@ injector.bind({MyInterface: MyInterfaceImplementation})
 
 @app.get(path="/hello-world")
 def hello_world(service: Provide[MyInterface]) -> dict:
-  return {
-    "result": service.do_something(),
-  }
+    return {
+        "result": service.do_something(),
+    }
 ```
 
 Using `injector.bind`, you can bind implementations that will be injected everywhere the bound interface is used.
@@ -217,8 +219,10 @@ Using `injector.bind`, you can bind implementations that will be injected everyw
 ## Integration with Celery
 
 ### Function based celery tasks
+
 ```python
 from celery import Celery
+
 from magic_di.celery import get_celery_loader, InjectableCeleryTask, PROVIDE
 
 app = Celery(
@@ -234,9 +238,12 @@ async def calculate(x: int, y: int, calculator: Calculator = PROVIDE):
 
 
 ### Class based celery tasks
+
 ```python
 from dataclasses import dataclass
+
 from celery import Celery
+
 from magic_di.celery import get_celery_loader, InjectableCeleryTask, BaseCeleryConnectableDeps, PROVIDE
 
 app = Celery(
@@ -244,18 +251,19 @@ app = Celery(
     task_cls=InjectableCeleryTask,
 )
 
+
 @dataclass
 class CalculatorTaskDeps(BaseCeleryConnectableDeps):
-  calculator: Calculator
+    calculator: Calculator
 
 
 class CalculatorTask(InjectableCeleryTask):
-  deps: CalculatorTaskDeps
+    deps: CalculatorTaskDeps
 
-  async def run(self, x: int, y: int, smart_processor: SmartProcessor = PROVIDE):
-    return smart_processor.process(
-      await self.deps.calculator.calculate(x, y)
-    )
+    async def run(self, x: int, y: int, smart_processor: SmartProcessor = PROVIDE):
+        return smart_processor.process(
+            await self.deps.calculator.calculate(x, y)
+        )
 
 
 app.register_task(CalculatorTask)
@@ -274,35 +282,37 @@ If you need to mock a dependency in tests, you can easily do so by using the `in
 To mock clients, you can use `InjectableMock` from the `testing` module.
 
 ### Default simple mock
+
 ```python
 import pytest
 from fastapi.testclient import TestClient
 from my_app import app
+
 from magic_di import DependencyInjector
 from magic_di.testing import InjectableMock
 
 
 @pytest.fixture()
 def injector():
-  return DependencyInjector()
+    return DependencyInjector()
 
 
 @pytest.fixture()
 def service_mock() -> Service:
-  return InjectableMock()
+    return InjectableMock()
 
 
 @pytest.fixture()
 def client(injector: DependencyInjector, service_mock: InjectableMock):
-  with injector.override({Service: service_mock.mock_cls}):
-    with TestClient(app) as client:
-        yield client
+    with injector.override({Service: service_mock.mock_cls}):
+        with TestClient(app) as client:
+            yield client
 
 
 def test_http_handler(client):
-  resp = client.post('/hello-world')
+    resp = client.post('/hello-world')
 
-  assert resp.status_code == 200
+    assert resp.status_code == 200
 ```
 
 ### Custom mocks
@@ -314,14 +324,14 @@ from magic_di.testing import get_injectable_mock_cls
 
 @pytest.fixture()
 def service_mock() -> Service:
-  return SomeSmartServiceMock()
+    return SomeSmartServiceMock()
 
 
 @pytest.fixture()
 def client(injector: DependencyInjector, service_mock: Service):
-  with injector.override({Service: get_injectable_mock_cls(service_mock)}):
-    with TestClient(app) as client:
-        yield client
+    with injector.override({Service: get_injectable_mock_cls(service_mock)}):
+        with TestClient(app) as client:
+            yield client
 ```
 
 ## Alternatives

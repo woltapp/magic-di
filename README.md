@@ -292,7 +292,7 @@ async def main(worker: Worker):
 
 if __name__ == '__main__':
     inject_and_run(main)
-``` 
+```
 
 ### Manual injection
 
@@ -304,13 +304,13 @@ from magic_di import DependencyInjector
 
 async def run_worker(worker: Worker):
     await worker.run()
-    
+
 
 async def main():
     injector = DependencyInjector()
-    
+
     injected_fn = injector.inject(run_worker)
-    
+
     async with injector:
         await injected_fn()
 

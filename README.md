@@ -28,6 +28,9 @@ Dependency Injector with minimal boilerplate code, built-in support for FastAPI 
 * [Integration with Celery](#integration-with-celery)
   * [Function based tasks](#function-based-celery-tasks)
   * [Class based tasks](#class-based-celery-tasks)
+* [Custom integrations](#custom-integrations)
+  * [Manual injection](#manual-injection)
+* [Forced injections](#forced-injections)
 * [Testing](#testing)
   * [Default simple mock](#default-simple-mock)
   * [Custom mocks](#custom-mocks)
@@ -275,6 +278,57 @@ You could notice that in these examples tasks are using Python async/await.
 **Due to this, getting results from async tasks is not possible in the following cases:**
 * When the `task_always_eager` config flag is enabled and task creation occurs inside the running event loop (e.g., inside an async FastAPI endpoint)
 * When calling the `.apply()` method inside running event loop (e.g., inside an async FastAPI endpoint)
+
+
+
+## Custom integrations
+For custom integration you can either use helper function `inject_and_run` or by using DependencyInjector manually
+```python
+from magic_di.utils import inject_and_run
+
+
+async def main(worker: Worker):
+    await worker.run()
+
+if __name__ == '__main__':
+    inject_and_run(main)
+```
+
+### Manual injection
+
+```python
+import asyncio
+
+from magic_di import DependencyInjector
+
+
+async def run_worker(worker: Worker):
+    await worker.run()
+
+
+async def main():
+    injector = DependencyInjector()
+
+    injected_fn = injector.inject(run_worker)
+
+    async with injector:
+        await injected_fn()
+
+if __name__ == '__main__':
+    asyncio.run(main())
+```
+
+## Forced injections
+You can force injector to inject non-connectable dependencies with type hint annotation `Injectable`
+```python
+from typing import Annotated
+
+from magic_di import Injectable, Connectable
+
+
+class Service(Connectable):
+    dependency: Annotated[NonConnectableDependency, Injectable]
+```
 
 ## Testing
 If you need to mock a dependency in tests, you can easily do so by using the `injector.override` context manager and still use this dependency injector.

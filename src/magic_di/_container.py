@@ -70,7 +70,7 @@ class SingletonDependencyContainer:
 
 def _wrap(obj: type[T], *args: Any, **kwargs: Any) -> type[T]:
     if not inspect.isclass(obj):
-        partial = functools.wraps(obj)(functools.partial(obj, *args, **kwargs))
+        partial = functools.wraps(obj)(functools.partial(obj, *args, **kwargs))  # type: ignore[var-annotated]
         return cast(type[T], partial)
 
     _instance: T | None = None
@@ -99,7 +99,7 @@ def _wrap(obj: type[T], *args: Any, **kwargs: Any) -> type[T]:
     #
     # Here we manually create a new singleton class factory using the `type` metaclass
     # Since the original class was not modified, it will use its own metaclass.
-    return functools.wraps(
+    return functools.wraps(  # type: ignore[return-value]
         obj,
         updated=(),
     )(

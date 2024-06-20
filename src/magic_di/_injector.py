@@ -133,7 +133,7 @@ class DependencyInjector:
                 else:
                     signature.deps[name] = hint
 
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             raise InspectionError(obj) from exc
 
         return signature

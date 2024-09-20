@@ -4,12 +4,11 @@ import functools
 import inspect
 from dataclasses import dataclass
 from threading import Lock
-from typing import TYPE_CHECKING, Any, Generic, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Generic, TypeVar
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
 
-    from magic_di import ConnectableProtocol
 
 T = TypeVar("T")
 
@@ -53,7 +52,7 @@ class SingletonDependencyContainer:
         self,
         *,
         reverse: bool = False,
-    ) -> Iterable[tuple[type, ConnectableProtocol]]:
+    ) -> Iterable[tuple[type, object]]:
         with self._lock:
             deps_iter: Iterable[Dependency[Any]] = list(
                 reversed(self._deps.values()) if reverse else self._deps.values(),
@@ -70,8 +69,8 @@ class SingletonDependencyContainer:
 
 def _wrap(obj: type[T], *args: Any, **kwargs: Any) -> type[T]:
     if not inspect.isclass(obj):
-        partial = functools.wraps(obj)(functools.partial(obj, *args, **kwargs))  # type: ignore[var-annotated]
-        return cast(type[T], partial)
+        partial: type[T] = functools.wraps(obj)(functools.partial(obj, *args, **kwargs))  # type: ignore[assignment]
+        return partial
 
     _instance: T | None = None
 

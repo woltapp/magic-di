@@ -31,6 +31,7 @@ Dependency Injector with minimal boilerplate code, built-in support for FastAPI 
 * [Custom integrations](#custom-integrations)
   * [Manual injection](#manual-injection)
 * [Forced injections](#forced-injections)
+* [Healthcheck](#healthcheck)
 * [Testing](#testing)
   * [Default simple mock](#default-simple-mock)
   * [Custom mocks](#custom-mocks)
@@ -328,6 +329,38 @@ from magic_di import Injectable, Connectable
 
 class Service(Connectable):
     dependency: Annotated[NonConnectableDependency, Injectable]
+```
+
+## Healthchecks
+You can implement `Pingable` protocol to define healthchecks for your clients. The `DependenciesHealthcheck` will call the `__ping__` method on all injected clients that implement this protocol.
+
+```python
+from magic_di.healthcheck import DependenciesHealthcheck
+
+
+class Service(Connectable):
+    def __init__(self, db: Database):
+        self.db = db
+
+    def is_connected(self):
+        return self.db.connected
+
+    async def __ping__(self) -> None:
+        if not self.is_connected():
+            raise Exception("Service is not connected")
+
+
+@app.get(path="/hello-world")
+def hello_world(service: Provide[Service]) -> dict:
+    return {
+        "is_connected": service.is_connected()
+    }
+
+
+@app.get(path="/healthcheck")
+async def healthcheck_handler(healthcheck: Provide[DependenciesHealthcheck]) -> dict:
+    await healthcheck.ping_dependencies()
+    return {"alive": True}
 ```
 
 ## Testing

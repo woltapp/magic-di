@@ -27,6 +27,7 @@ def get_cls_from_optional(cls: T) -> T:
     Extract the actual class from a union that includes None.
     If it is not a union type hint, it returns the same type hint.
     Example:
+    ```python
         >>> get_cls_from_optional(Union[str, None])
         str
         >>> get_cls_from_optional(str | None)
@@ -35,6 +36,7 @@ def get_cls_from_optional(cls: T) -> T:
         str
         >>> get_cls_from_optional(int)
         int
+    ```
     Args:
         cls (T): Type hint for class
     Returns:
@@ -73,7 +75,7 @@ def safe_is_instance(sub_cls: Any, cls: type) -> bool:
         return False
 
 
-def is_injectable(cls: Any) -> bool:
+def is_connectable(cls: Any) -> ConnectableProtocol | None:
     """
     Check if a class is a subclass of ConnectableProtocol.
 
@@ -81,9 +83,14 @@ def is_injectable(cls: Any) -> bool:
         cls (Any): The class to check.
 
     Returns:
-        bool: True if the class is a subclass of ConnectableProtocol, False otherwise.
+        ConnectableProtocol | None: return instance if the class
+        is a subclass of ConnectableProtocol, None otherwise.
     """
-    return safe_is_subclass(cls, ConnectableProtocol) or safe_is_instance(cls, ConnectableProtocol)
+    connectable = safe_is_subclass(cls, ConnectableProtocol) or safe_is_instance(
+        cls,
+        ConnectableProtocol,
+    )
+    return cls if connectable else None
 
 
 def get_type_hints(obj: Any, *, include_extras: bool = False) -> dict[str, type]:

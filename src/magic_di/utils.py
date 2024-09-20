@@ -53,9 +53,9 @@ def inject_and_run(
     """
     injector = injector or DependencyInjector()
 
-    injected = injector.inject(fn)
-
     async def run() -> T:
+        injected = injector.inject(fn)
+
         async with injector:
             if inspect.iscoroutinefunction(fn):
                 return await injected()  # type: ignore[misc,no-any-return]

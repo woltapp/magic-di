@@ -41,7 +41,8 @@ class DependenciesHealthcheck(Connectable):
 
         try:
             for dependency in self.injector.get_dependencies_by_interface(PingableProtocol):
-                tasks.add(asyncio.ensure_future(dependency.__ping__()))
+                future = asyncio.ensure_future(self.ping(dependency))
+                tasks.add(future)
 
                 if len(tasks) >= max_concurrency:
                     tasks, _ = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
@@ -57,3 +58,20 @@ class DependenciesHealthcheck(Connectable):
             if tasks:
                 with suppress(asyncio.CancelledError):
                     await asyncio.gather(*tasks)
+
+    async def ping(self, dependency: PingableProtocol) -> None:
+        """
+        Ping a single dependency
+
+        :param dependency: Dependency to ping
+        """
+        dependency_name = dependency.__class__.__name__
+        self.injector.logger.debug("Pinging dependency %s...", dependency_name)
+
+        try:
+            await dependency.__ping__()
+        except Exception as exc:
+            self.injector.logger.exception("Failed to ping dependency %s", dependency_name)
+            raise exc  # noqa: TRY201
+        else:
+            self.injector.logger.debug("Dependency %s is healthy", dependency_name)

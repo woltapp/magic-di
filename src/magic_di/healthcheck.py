@@ -68,10 +68,6 @@ class DependenciesHealthcheck(Connectable):
         dependency_name = dependency.__class__.__name__
         self.injector.logger.debug("Pinging dependency %s...", dependency_name)
 
-        try:
-            await dependency.__ping__()
-        except Exception as exc:
-            self.injector.logger.exception("Failed to ping dependency %s", dependency_name)
-            raise exc  # noqa: TRY201
-        else:
-            self.injector.logger.debug("Dependency %s is healthy", dependency_name)
+        await dependency.__ping__()
+
+        self.injector.logger.debug("Dependency %s is healthy", dependency_name)

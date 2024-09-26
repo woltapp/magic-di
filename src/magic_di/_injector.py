@@ -18,7 +18,8 @@ from magic_di._signature import Signature
 from magic_di._utils import (
     get_cls_from_optional,
     get_type_hints,
-    is_injectable,
+    is_connectable,
+    safe_is_instance,
     safe_is_subclass,
 )
 from magic_di.exceptions import InjectionError, InspectionError
@@ -26,7 +27,6 @@ from magic_di.exceptions import InjectionError, InspectionError
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable, Iterator
 
-    from magic_di._connectable import ConnectableProtocol
 
 # flag to use in typing.Annotated
 # to forcefully mark dependency as injectable
@@ -111,14 +111,14 @@ class DependencyInjector:
             hints_with_extras = get_type_hints(obj, include_extras=True)
 
             if not hints:
-                return Signature(obj, is_injectable=is_injectable(obj))
+                return Signature(obj, is_injectable=bool(is_connectable(obj)))
 
             if inspect.ismethod(obj):
                 hints.pop("self", None)
 
             hints.pop("return", None)
 
-            signature = Signature(obj, is_injectable=is_injectable(obj))
+            signature = Signature(obj, is_injectable=bool(is_connectable(obj)))
 
             for name, hint_ in hints.items():
                 hint = self._unwrap_type_hint(hint_)
@@ -126,7 +126,7 @@ class DependencyInjector:
 
                 if is_injector(hint):
                     signature.injector_arg = name
-                elif not is_injectable(hint) and not is_forcefully_marked_as_injectable(
+                elif not is_connectable(hint) and not is_forcefully_marked_as_injectable(
                     hint_with_extra,
                 ):
                     signature.kwargs[name] = hint
@@ -149,20 +149,31 @@ class DependencyInjector:
             self.inject(postponed)
 
         for cls, instance in self._deps.iter_instances():
-            if is_injectable(instance):
+            if connectable_instance := is_connectable(instance):
                 self.logger.debug("Connecting %s...", cls.__name__)
-                await instance.__connect__()
+                await connectable_instance.__connect__()
 
     async def disconnect(self) -> None:
         """
         Disconnect all injected dependencies
         """
         for cls, instance in self._deps.iter_instances(reverse=True):
-            if is_injectable(instance):
+            if connectable_instance := is_connectable(instance):
                 try:
-                    await instance.__disconnect__()
+                    await connectable_instance.__disconnect__()
                 except Exception:
                     self.logger.exception("Failed to disconnect %s", cls.__name__)
+
+    def get_dependencies_by_interface(
+        self,
+        interface: Callable[..., AnyObject],
+    ) -> Iterable[AnyObject]:
+        """
+        Get all injected dependencies that implement a particular interface.
+        """
+        for _, instance in self._deps.iter_instances():
+            if safe_is_instance(instance, interface):  # type: ignore[arg-type]
+                yield instance  # type: ignore[misc]
 
     async def __aenter__(self) -> DependencyInjector:  # noqa: PYI034
         await self.connect()
@@ -171,8 +182,8 @@ class DependencyInjector:
     async def __aexit__(self, *args: object, **kwargs: Any) -> None:
         await self.disconnect()
 
-    def iter_deps(self) -> Iterable[ConnectableProtocol]:
-        instance: ConnectableProtocol
+    def iter_deps(self) -> Iterable[object]:
+        instance: object
 
         for _, instance in self._deps.iter_instances():
             yield instance

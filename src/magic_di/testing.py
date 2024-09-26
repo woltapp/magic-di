@@ -22,18 +22,20 @@ class InjectableMock(AsyncMock):
     and use AsyncMock instead of a real class instance
 
     Example:
-        @pytest.fixture()
-        def client():
-          injector = DependencyInjector()
+    ```python
+    @pytest.fixture()
+    def client():
+      injector = DependencyInjector()
 
-          with injector.override({Service: InjectableMock().mock_cls}):
-            with TestClient(app) as client:
-                yield client
+      with injector.override({Service: InjectableMock().mock_cls}):
+        with TestClient(app) as client:
+            yield client
 
-        def test_http_handler(client):
-          resp = client.post('/hello-world')
+    def test_http_handler(client):
+      resp = client.post('/hello-world')
 
-          assert resp.status_code == 200
+      assert resp.status_code == 200
+    ```
     """
 
     @property

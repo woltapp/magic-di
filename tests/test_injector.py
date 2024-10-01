@@ -61,6 +61,21 @@ async def test_function_injection_success(injector: DependencyInjector) -> None:
     assert isinstance(service, Service)
 
 
+@pytest.mark.asyncio()
+async def test_function_injection_success_legacy_optional(injector: DependencyInjector) -> None:
+    def run_service(service: Service | None) -> Service:
+        assert service is not None
+        return service
+
+    injected = injector.inject(run_service)
+
+    async with injector:
+        service = injected()
+        assert service.is_alive()
+
+    assert isinstance(service, Service)
+
+
 def test_class_injection_missing_class(injector: DependencyInjector) -> None:
     with pytest.raises(InjectionError):
         injector.inject(BrokenService)

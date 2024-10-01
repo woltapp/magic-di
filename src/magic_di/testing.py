@@ -22,7 +22,7 @@ class InjectableMock(AsyncMock):
     and use AsyncMock instead of a real class instance
 
     Example:
-    ```python
+    ``` py
     @pytest.fixture()
     def client():
       injector = DependencyInjector()

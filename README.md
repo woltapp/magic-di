@@ -331,7 +331,7 @@ class Service(Connectable):
     dependency: Annotated[NonConnectableDependency, Injectable]
 ```
 
-## Healthchecks
+## Healthcheck
 You can implement `Pingable` protocol to define healthchecks for your clients. The `DependenciesHealthcheck` will call the `__ping__` method on all injected clients that implement this protocol.
 
 ```python

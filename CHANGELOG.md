@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [0.2.1] - 2024-10-01
 ### Fixed
 - Fixed compatibility with Python3.10 for optional type hints
 
@@ -23,7 +24,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 - Initial version
 
-[Unreleased]: https://github.com/woltapp/magic-di/compare/0.2.0...master
+[Unreleased]: https://github.com/woltapp/magic-di/compare/0.2.1...master
+[0.2.1]: https://github.com/woltapp/magic-di/compare/0.2.0...0.2.1
 [0.2.0]: https://github.com/woltapp/magic-di/compare/0.1.0...0.2.0
 [0.1.0]: https://github.com/woltapp/magic-di/tree/0.1.0
 

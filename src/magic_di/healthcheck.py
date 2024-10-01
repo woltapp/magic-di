@@ -19,7 +19,7 @@ class DependenciesHealthcheck(Connectable):
 
     Example usage:
 
-    ```python
+    ``` py
     from app.components.services.health import DependenciesHealthcheck
 
     async def main(redis: Redis, deps_healthcheck: DependenciesHealthcheck) -> None:

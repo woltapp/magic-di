@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from typing import Any, TypeVar, cast, get_args
+from typing import Any, Optional, TypeVar, cast, get_args
 from typing import get_type_hints as _get_type_hints
 
 from magic_di import ConnectableProtocol
 
 LegacyUnionType = type(object | None)
+LegacyOptionalType = type(Optional[object])  # noqa: UP007
 
 try:
     from types import UnionType  # type: ignore[import-error,unused-ignore]
@@ -27,7 +28,7 @@ def get_cls_from_optional(cls: T) -> T:
     Extract the actual class from a union that includes None.
     If it is not a union type hint, it returns the same type hint.
     Example:
-    ```python
+    ``` py
         >>> get_cls_from_optional(Union[str, None])
         str
         >>> get_cls_from_optional(str | None)
@@ -36,13 +37,15 @@ def get_cls_from_optional(cls: T) -> T:
         str
         >>> get_cls_from_optional(int)
         int
+        >>> get_cls_from_optional(Optional[str])
+        str
     ```
     Args:
         cls (T): Type hint for class
     Returns:
         T: Extracted class
     """
-    if not isinstance(cls, UnionType | LegacyUnionType):
+    if not isinstance(cls, UnionType | LegacyUnionType | LegacyOptionalType):
         return cls
 
     args = get_args(cls)

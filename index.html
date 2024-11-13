@@ -1,0 +1,1376 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+        <link rel="next" href="api_docs/">
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.27">
+    
+    
+      
+        <title>magic-di</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#magic-di" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="magic-di" class="md-header__button md-logo" aria-label="magic-di" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            magic-di
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Introduction
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4zM7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/woltapp/magic-di" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="magic-di" class="md-nav__button md-logo" aria-label="magic-di" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    magic-di
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/woltapp/magic-di" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Introduction
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting Started
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clients-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clients Configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Clients Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#zero-config-clients" class="md-nav__link">
+    <span class="md-ellipsis">
+      Zero config clients
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-interfaces-instead-of-implementations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using interfaces instead of implementations
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-with-celery" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integration with Celery
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Integration with Celery">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-based-celery-tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Function based celery tasks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-based-celery-tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Class based celery tasks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Limitations
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-integrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom integrations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Custom integrations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#manual-injection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Manual injection
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#forced-injections" class="md-nav__link">
+    <span class="md-ellipsis">
+      Forced injections
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#healthcheck" class="md-nav__link">
+    <span class="md-ellipsis">
+      Healthcheck
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Testing
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#default-simple-mock" class="md-nav__link">
+    <span class="md-ellipsis">
+      Default simple mock
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-mocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom mocks
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternatives" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alternatives
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Alternatives">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fastapis-built-in-dependency-injection" class="md-nav__link">
+    <span class="md-ellipsis">
+      FastAPI's built-in dependency injection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-dependency-injector" class="md-nav__link">
+    <span class="md-ellipsis">
+      python-dependency-injector
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#development" class="md-nav__link">
+    <span class="md-ellipsis">
+      Development
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Development">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#testing_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Testing
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#releasing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Releasing
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pre-commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pre-commit
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="api_docs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API documentation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="changelog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Changelog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install" class="md-nav__link">
+    <span class="md-ellipsis">
+      Install
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting Started
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clients-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clients Configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Clients Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#zero-config-clients" class="md-nav__link">
+    <span class="md-ellipsis">
+      Zero config clients
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-interfaces-instead-of-implementations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using interfaces instead of implementations
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-with-celery" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integration with Celery
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Integration with Celery">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-based-celery-tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Function based celery tasks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-based-celery-tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Class based celery tasks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limitations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Limitations
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#custom-integrations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom integrations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Custom integrations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#manual-injection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Manual injection
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#forced-injections" class="md-nav__link">
+    <span class="md-ellipsis">
+      Forced injections
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#healthcheck" class="md-nav__link">
+    <span class="md-ellipsis">
+      Healthcheck
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Testing
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#default-simple-mock" class="md-nav__link">
+    <span class="md-ellipsis">
+      Default simple mock
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-mocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Custom mocks
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#alternatives" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alternatives
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Alternatives">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fastapis-built-in-dependency-injection" class="md-nav__link">
+    <span class="md-ellipsis">
+      FastAPI's built-in dependency injection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#python-dependency-injector" class="md-nav__link">
+    <span class="md-ellipsis">
+      python-dependency-injector
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#development" class="md-nav__link">
+    <span class="md-ellipsis">
+      Development
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Development">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#testing_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Testing
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#releasing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Releasing
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pre-commit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pre-commit
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="magic-di">magic-di</h1>
+<p><a href="https://pypi.python.org/pypi/magic-di/"><img alt="PyPI" src="https://img.shields.io/pypi/v/magic-di?style=flat-square" /></a>
+<a href="https://pypi.python.org/pypi/magic-di/"><img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/magic-di?style=flat-square" /></a>
+<a href="https://pypi.python.org/pypi/magic-di/"><img alt="PyPI - License" src="https://img.shields.io/pypi/l/magic-di?style=flat-square" /></a>
+<a href="https://github.com/woltapp/wolt-python-package-cookiecutter"><img alt="Coookiecutter - Wolt" src="https://img.shields.io/badge/cookiecutter-Wolt-00c2e8?style=flat-square&amp;logo=cookiecutter&amp;logoColor=D4AA00&amp;link=https://github.com/woltapp/wolt-python-package-cookiecutter" /></a></p>
+<hr />
+<p><strong>Documentation</strong>: <a href="https://woltapp.github.io/magic-di">https://woltapp.github.io/magic-di</a></p>
+<p><strong>Source Code</strong>: <a href="https://github.com/woltapp/magic-di">https://github.com/woltapp/magic-di</a></p>
+<p><strong>PyPI</strong>: <a href="https://pypi.org/project/magic-di/">https://pypi.org/project/magic-di/</a></p>
+<hr />
+<p>Dependency Injector with minimal boilerplate code, built-in support for FastAPI and Celery, and seamless integration to basically anything.</p>
+<h2 id="contents">Contents</h2>
+<ul>
+<li><a href="#install">Install</a></li>
+<li><a href="#getting-started">Getting Started</a></li>
+<li><a href="#clients-configuration">Clients Configuration</a></li>
+<li><a href="#zero-config-clients">Zero config clients</a></li>
+<li><a href="#clients-with-config">Clients with Config</a></li>
+<li><a href="#using-interfaces-instead-of-implementations">Using interfaces instead of implementations</a></li>
+<li><a href="#integration-with-celery">Integration with Celery</a></li>
+<li><a href="#function-based-celery-tasks">Function based tasks</a></li>
+<li><a href="#class-based-celery-tasks">Class based tasks</a></li>
+<li><a href="#custom-integrations">Custom integrations</a></li>
+<li><a href="#manual-injection">Manual injection</a></li>
+<li><a href="#forced-injections">Forced injections</a></li>
+<li><a href="#healthcheck">Healthcheck</a></li>
+<li><a href="#testing">Testing</a></li>
+<li><a href="#default-simple-mock">Default simple mock</a></li>
+<li><a href="#custom-mocks">Custom mocks</a></li>
+<li><a href="#alternatives">Alternatives</a></li>
+<li><a href="#development">Development</a></li>
+</ul>
+<h2 id="install">Install</h2>
+<pre><code class="language-bash">pip install magic-di
+</code></pre>
+<p>With FastAPI integration:</p>
+<pre><code class="language-bash">pip install 'magic-di[fastapi]'
+</code></pre>
+<p>With Celery integration:</p>
+<pre><code class="language-bash">pip install 'magic-di[celery]'
+</code></pre>
+<h2 id="getting-started">Getting Started</h2>
+<pre><code class="language-python">from fastapi import FastAPI
+
+from magic_di import Connectable
+from magic_di.fastapi import inject_app, Provide
+
+app = inject_app(FastAPI())
+
+
+class Database:
+    connected: bool = False
+
+    def __connect__(self):
+        self.connected = True
+
+    def __disconnect__(self):
+        self.connected = False
+
+
+class Service(Connectable):
+    def __init__(self, db: Database):
+        self.db = db
+
+    def is_connected(self):
+        return self.db.connected
+
+
+@app.get(path=&quot;/hello-world&quot;)
+def hello_world(service: Provide[Service]) -&gt; dict:
+    return {
+        &quot;is_connected&quot;: service.is_connected()
+    }
+</code></pre>
+<p>That's all!</p>
+<p>This simple code will recursively inject all dependencies and connect them using the <code>__connect__</code> and <code>__disconnect__</code> magic methods.</p>
+<p>But what happened there?
+1) We created a new FastAPI app and injected it. The <code>inject_app</code> function makes the injector connect all clients on app startup and disconnect them on shutdown. That’s how you can open and close all connections (e.g., session to DB).
+2) We defined new classes with <code>__connect__</code> and <code>__disconnect__</code> magic methods. <strong>That’s how the injector finds classes that need to be injected</strong>. The injector uses duck typing to check if some class has these methods. It means you don’t need to inherit from <code>ClientProtocol</code> (but you can to reduce the number of code lines).
+3) Wrapped the <code>Service</code> type hint into <code>Provide</code> so that FastAPI can use our DI. <strong>Please note</strong>: you need to use <code>Provide</code> only in FastAPI endpoints, which makes your codebase independent from FastAPI and this Dependency Injector.
+4) PROFIT!</p>
+<p>As you can see, in this example, you don’t need to write special constructors to store your dependencies in global variables. All you need to do to complete the startup logic is to write it in the <code>__connect__</code> method.</p>
+<h2 id="clients-configuration">Clients Configuration</h2>
+<p>This dependency injector promotes the idea of ‘zero-config clients’, but you can still use configurations if you prefer</p>
+<h3 id="zero-config-clients">Zero config clients</h3>
+<p>Simply fetch everything needed from the environment. There is no need for an additional configuration file</p>
+<pre><code class="language-python">from dataclasses import dataclass, field
+
+from pydantic import Field
+from pydantic_settings import BaseSettings
+from redis.asyncio import Redis as RedisClient, from_url
+
+
+class RedisConfig(BaseSettings):
+    url: str = Field(validation_alias='REDIS_URL')
+    decode_responses: bool = Field(validation_alias='REDIS_DECODE_RESPONSES')
+
+
+@dataclass
+class Redis:
+    config: RedisConfig = field(default_factory=RedisConfig)
+    client: RedisClient = field(init=False)
+
+    async def __connect__(self):
+        self.client = await from_url(self.config.url, decode_responses=self.config.decode_responses)
+        await self.client.ping()
+
+    async def __disconnect__(self):
+        await self.client.close()
+
+    @property
+    def db(self) -&gt; RedisClient:
+        return self.client
+
+
+Redis()  # works even without passing arguments in the constructor.
+</code></pre>
+<p>As an alternative, you can inject configs instead of using default factories.</p>
+<pre><code class="language-python">from dataclasses import dataclass, field
+
+from pydantic import Field
+from pydantic_settings import BaseSettings
+from redis.asyncio import Redis as RedisClient, from_url
+
+from magic_di import Connectable, DependencyInjector
+
+
+class RedisConfig(Connectable, BaseSettings):
+    url: str = Field(validation_alias='REDIS_URL')
+    decode_responses: bool = Field(validation_alias='REDIS_DECODE_RESPONSES')
+
+
+@dataclass
+class Redis:
+    config: RedisConfig
+    client: RedisClient = field(init=False)
+
+    async def __connect__(self):
+        self.client = await from_url(self.config.url, decode_responses=self.config.decode_responses)
+        await self.client.ping()
+
+    async def __disconnect__(self):
+        await self.client.close()
+
+    @property
+    def db(self) -&gt; RedisClient:
+        return self.client
+
+
+injector = DependencyInjector()
+redis = injector.inject(Redis)()  # works even without passing arguments in the constructor.
+
+async with injector:
+    await redis.db.ping()
+</code></pre>
+<h2 id="using-interfaces-instead-of-implementations">Using interfaces instead of implementations</h2>
+<p>Sometimes, you may not want to stick to a certain interface implementation everywhere. Therefore, you can use interfaces (protocols, abstract classes) with Dependency Injection (DI). With DI, you can effortlessly bind an implementation to an interface and subsequently update it if necessary.</p>
+<pre><code class="language-python">from typing import Protocol
+
+from fastapi import FastAPI
+
+from magic_di import Connectable, DependencyInjector
+from magic_di.fastapi import inject_app, Provide
+
+
+class MyInterface(Protocol):
+    def do_something(self) -&gt; bool:
+        ...
+
+
+class MyInterfaceImplementation(Connectable):
+    def do_something(self) -&gt; bool:
+        return True
+
+
+app = inject_app(FastAPI())
+
+injector = DependencyInjector()
+injector.bind({MyInterface: MyInterfaceImplementation})
+
+
+@app.get(path=&quot;/hello-world&quot;)
+def hello_world(service: Provide[MyInterface]) -&gt; dict:
+    return {
+        &quot;result&quot;: service.do_something(),
+    }
+</code></pre>
+<p>Using <code>injector.bind</code>, you can bind implementations that will be injected everywhere the bound interface is used.</p>
+<h2 id="integration-with-celery">Integration with Celery</h2>
+<h3 id="function-based-celery-tasks">Function based celery tasks</h3>
+<pre><code class="language-python">from celery import Celery
+
+from magic_di.celery import get_celery_loader, InjectableCeleryTask, PROVIDE
+
+app = Celery(
+    loader=get_celery_loader(),
+    task_cls=InjectableCeleryTask,
+)
+
+
+@app.task
+async def calculate(x: int, y: int, calculator: Calculator = PROVIDE):
+    await calculator.calculate(x, y)
+</code></pre>
+<h3 id="class-based-celery-tasks">Class based celery tasks</h3>
+<pre><code class="language-python">from dataclasses import dataclass
+
+from celery import Celery
+
+from magic_di.celery import get_celery_loader, InjectableCeleryTask, BaseCeleryConnectableDeps, PROVIDE
+
+app = Celery(
+    loader=get_celery_loader(),
+    task_cls=InjectableCeleryTask,
+)
+
+
+@dataclass
+class CalculatorTaskDeps(BaseCeleryConnectableDeps):
+    calculator: Calculator
+
+
+class CalculatorTask(InjectableCeleryTask):
+    deps: CalculatorTaskDeps
+
+    async def run(self, x: int, y: int, smart_processor: SmartProcessor = PROVIDE):
+        return smart_processor.process(
+            await self.deps.calculator.calculate(x, y)
+        )
+
+
+app.register_task(CalculatorTask)
+</code></pre>
+<h3 id="limitations">Limitations</h3>
+<p>You could notice that in these examples tasks are using Python async/await.
+<code>InjectableCeleryTask</code> provides support for writing async code. However, it still executes code synchronously.
+<strong>Due to this, getting results from async tasks is not possible in the following cases:</strong>
+* When the <code>task_always_eager</code> config flag is enabled and task creation occurs inside the running event loop (e.g., inside an async FastAPI endpoint)
+* When calling the <code>.apply()</code> method inside running event loop (e.g., inside an async FastAPI endpoint)</p>
+<h2 id="custom-integrations">Custom integrations</h2>
+<p>For custom integration you can either use helper function <code>inject_and_run</code> or by using DependencyInjector manually</p>
+<pre><code class="language-python">from magic_di.utils import inject_and_run
+
+
+async def main(worker: Worker):
+    await worker.run()
+
+if __name__ == '__main__':
+    inject_and_run(main)
+</code></pre>
+<h3 id="manual-injection">Manual injection</h3>
+<pre><code class="language-python">import asyncio
+
+from magic_di import DependencyInjector
+
+
+async def run_worker(worker: Worker):
+    await worker.run()
+
+
+async def main():
+    injector = DependencyInjector()
+
+    injected_fn = injector.inject(run_worker)
+
+    async with injector:
+        await injected_fn()
+
+if __name__ == '__main__':
+    asyncio.run(main())
+</code></pre>
+<h2 id="forced-injections">Forced injections</h2>
+<p>You can force injector to inject non-connectable dependencies with type hint annotation <code>Injectable</code></p>
+<pre><code class="language-python">from typing import Annotated
+
+from magic_di import Injectable, Connectable
+
+
+class Service(Connectable):
+    dependency: Annotated[NonConnectableDependency, Injectable]
+</code></pre>
+<h2 id="healthcheck">Healthcheck</h2>
+<p>You can implement <code>Pingable</code> protocol to define healthchecks for your clients. The <code>DependenciesHealthcheck</code> will call the <code>__ping__</code> method on all injected clients that implement this protocol.</p>
+<pre><code class="language-python">from magic_di.healthcheck import DependenciesHealthcheck
+
+
+class Service(Connectable):
+    def __init__(self, db: Database):
+        self.db = db
+
+    def is_connected(self):
+        return self.db.connected
+
+    async def __ping__(self) -&gt; None:
+        if not self.is_connected():
+            raise Exception(&quot;Service is not connected&quot;)
+
+
+@app.get(path=&quot;/hello-world&quot;)
+def hello_world(service: Provide[Service]) -&gt; dict:
+    return {
+        &quot;is_connected&quot;: service.is_connected()
+    }
+
+
+@app.get(path=&quot;/healthcheck&quot;)
+async def healthcheck_handler(healthcheck: Provide[DependenciesHealthcheck]) -&gt; dict:
+    await healthcheck.ping_dependencies()
+    return {&quot;alive&quot;: True}
+</code></pre>
+<h2 id="testing">Testing</h2>
+<p>If you need to mock a dependency in tests, you can easily do so by using the <code>injector.override</code> context manager and still use this dependency injector.</p>
+<p>To mock clients, you can use <code>InjectableMock</code> from the <code>testing</code> module.</p>
+<h3 id="default-simple-mock">Default simple mock</h3>
+<pre><code class="language-python">import pytest
+from fastapi.testclient import TestClient
+from my_app import app
+
+from magic_di import DependencyInjector
+from magic_di.testing import InjectableMock
+
+
+@pytest.fixture()
+def injector():
+    return DependencyInjector()
+
+
+@pytest.fixture()
+def service_mock() -&gt; Service:
+    return InjectableMock()
+
+
+@pytest.fixture()
+def client(injector: DependencyInjector, service_mock: InjectableMock):
+    with injector.override({Service: service_mock.mock_cls}):
+        with TestClient(app) as client:
+            yield client
+
+
+def test_http_handler(client):
+    resp = client.post('/hello-world')
+
+    assert resp.status_code == 200
+</code></pre>
+<h3 id="custom-mocks">Custom mocks</h3>
+<p>As an alternative, you can your use custom mocks.</p>
+<pre><code class="language-python">from magic_di.testing import get_injectable_mock_cls
+
+
+@pytest.fixture()
+def service_mock() -&gt; Service:
+    return SomeSmartServiceMock()
+
+
+@pytest.fixture()
+def client(injector: DependencyInjector, service_mock: Service):
+    with injector.override({Service: get_injectable_mock_cls(service_mock)}):
+        with TestClient(app) as client:
+            yield client
+</code></pre>
+<h2 id="alternatives">Alternatives</h2>
+<h3 id="fastapis-built-in-dependency-injection"><a href="https://fastapi.tiangolo.com/tutorial/dependencies/">FastAPI's built-in dependency injection</a></h3>
+<p>FastAPI's built-in DI is great, but it makes the project (and its business logic) dependent on FastAPI, <code>fastapi.Depends</code> specifically.</p>
+<p><code>magic-di</code> decouples DI from other dependencies while still offering seamless integration to FastAPI, for example.</p>
+<h3 id="python-dependency-injector"><a href="https://github.com/ets-labs/python-dependency-injector">python-dependency-injector</a></h3>
+<p><a href="https://github.com/ets-labs/python-dependency-injector">python-dependency-injector</a> is great, but it requires a notable amount of boilerplate code.</p>
+<p>The goal of <code>magic-di</code> is to <strong>reduce the amount of code as much as possible</strong> and get rid of enterprise code with countless configs, containers, and fabrics.
+The philosophy of <code>magic-di</code> is that clients know how to configure themselves and perform all startup routines.</p>
+<h2 id="development">Development</h2>
+<ul>
+<li>Clone this repository</li>
+<li>Requirements:</li>
+<li><a href="https://python-poetry.org/">Poetry</a></li>
+<li>Python 3.10+</li>
+<li>Create a virtual environment and install the dependencies</li>
+</ul>
+<pre><code class="language-sh">poetry install --all-extras
+</code></pre>
+<ul>
+<li>Activate the virtual environment</li>
+</ul>
+<pre><code class="language-sh">poetry shell
+</code></pre>
+<h3 id="testing_1">Testing</h3>
+<pre><code class="language-sh">pytest
+</code></pre>
+<h3 id="documentation">Documentation</h3>
+<p>The documentation is automatically generated from the content of the <a href="https://github.com/woltapp/magic-di/tree/master/docs">docs directory</a> and from the docstrings
+ of the public signatures of the source code. The documentation is updated and published as a <a href="https://pages.github.com/">Github Pages page</a> automatically as part each release.</p>
+<h3 id="releasing">Releasing</h3>
+<p>Trigger the <a href="https://github.com/woltapp/magic-di/actions/workflows/draft_release.yml">Draft release workflow</a>
+(press <em>Run workflow</em>). This will update the changelog &amp; version and create a GitHub release which is in <em>Draft</em> state.</p>
+<p>Find the draft release from the
+<a href="https://github.com/woltapp/magic-di/releases">GitHub releases</a> and publish it. When
+ a release is published, it'll trigger <a href="https://github.com/woltapp/magic-di/blob/master/.github/workflows/release.yml">release</a> workflow which creates PyPI
+ release and deploys updated documentation.</p>
+<h3 id="pre-commit">Pre-commit</h3>
+<p>Pre-commit hooks run all the auto-formatting (<code>ruff format</code>), linters (e.g. <code>ruff</code> and <code>mypy</code>), and other quality
+ checks to make sure the changeset is in good shape before a commit/push happens.</p>
+<p>You can install the hooks with (runs for each commit):</p>
+<pre><code class="language-sh">pre-commit install
+</code></pre>
+<p>Or if you want them to run only for each push:</p>
+<pre><code class="language-sh">pre-commit install -t pre-push
+</code></pre>
+<p>Or if you want e.g. want to run all checks manually for all files:</p>
+<pre><code class="language-sh">pre-commit run --all-files
+</code></pre>
+<hr />
+<p>This project was generated using the <a href="https://github.com/woltapp/wolt-python-package-cookiecutter">wolt-python-package-cookiecutter</a> template.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": ".", "features": [], "search": "assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.ad660dcc.min.js"></script>
+      
+    
+  </body>
+</html>

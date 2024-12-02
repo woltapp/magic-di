@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from typing import Protocol
 
 import pytest
+
 from magic_di import Connectable, DependencyInjector
 
 
@@ -68,6 +69,6 @@ class ServiceWithBindings:
     repo: RepoInterface
 
 
-@pytest.fixture()
+@pytest.fixture
 def injector() -> DependencyInjector:
     return DependencyInjector()

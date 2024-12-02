@@ -2,7 +2,6 @@ import asyncio
 
 from magic_di import ConnectableProtocol, DependencyInjector
 from magic_di.utils import inject_and_run
-
 from tests.conftest import Repository
 
 

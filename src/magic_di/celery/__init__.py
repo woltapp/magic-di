@@ -4,9 +4,9 @@ from ._provide import PROVIDE
 from ._task import BaseCeleryConnectableDeps, InjectableCeleryTask
 
 __all__ = (
-    "InjectableCeleryTask",
-    "BaseCeleryConnectableDeps",
-    "get_celery_loader",
-    "EventLoopGetter",
     "PROVIDE",
+    "BaseCeleryConnectableDeps",
+    "EventLoopGetter",
+    "InjectableCeleryTask",
+    "get_celery_loader",
 )

@@ -2,11 +2,11 @@ from typing import Annotated
 
 import pytest
 from fastapi import APIRouter, Depends, FastAPI
+from starlette.testclient import TestClient
+
 from magic_di import DependencyInjector
 from magic_di.fastapi import Provide, inject_app
 from magic_di.fastapi._provide import FastAPIInjectionError
-from starlette.testclient import TestClient
-
 from tests.conftest import Database, Service
 
 

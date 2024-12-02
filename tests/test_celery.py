@@ -11,6 +11,8 @@ import pytest
 from celery import Celery
 from celery.bin.celery import celery  # type: ignore[import-untyped]
 from fastapi import FastAPI
+from starlette.testclient import TestClient
+
 from magic_di import DependencyInjector
 from magic_di.celery import (
     PROVIDE,
@@ -18,8 +20,6 @@ from magic_di.celery import (
     InjectableCeleryTask,
     get_celery_loader,
 )
-from starlette.testclient import TestClient
-
 from tests.conftest import AnotherDatabase, Service
 
 TEST_ERR_MSG = "TEST_ERR_MSG"
@@ -153,7 +153,7 @@ def test_async_function_based_tasks(
     assert list(result) == [1010, "123", True]
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_sync_function_based_tasks(
     run_celery: Celery,
     service_ping_task_sync: InjectableCeleryTask,
@@ -261,7 +261,7 @@ def test_retries_class_based_task() -> None:
         (True, True, [call(), call()]),
     ],
 )
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_async_function_based_tasks_inside_event_loop(
     service_ping_task: InjectableCeleryTask,
     *,

@@ -69,7 +69,7 @@ class SingletonDependencyContainer:
 
 def _wrap(obj: type[T], *args: Any, **kwargs: Any) -> type[T]:
     if not inspect.isclass(obj):
-        partial: type[T] = functools.wraps(obj)(functools.partial(obj, *args, **kwargs))  # type: ignore[assignment]
+        partial: type[T] = functools.wraps(obj)(functools.partial(obj, *args, **kwargs))
         return partial
 
     _instance: T | None = None

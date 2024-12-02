@@ -4,9 +4,9 @@ from dataclasses import dataclass
 from typing import Annotated, Any, Generic, TypeVar
 
 import pytest
+
 from magic_di import Connectable, DependencyInjector, Injectable
 from magic_di.exceptions import InjectionError
-
 from tests.conftest import (
     AnotherDatabase,
     AsyncWorkers,
@@ -20,7 +20,7 @@ from tests.conftest import (
 )
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_class_injection_success(injector: DependencyInjector) -> None:
     injected_service = injector.inject(Service)()
     assert not injected_service.is_alive()
@@ -47,7 +47,7 @@ async def test_class_injection_success(injector: DependencyInjector) -> None:
     assert not injected_service.workers.connected
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_function_injection_success(injector: DependencyInjector) -> None:
     def run_service(service: Service) -> Service:
         return service
@@ -61,7 +61,7 @@ async def test_function_injection_success(injector: DependencyInjector) -> None:
     assert isinstance(service, Service)
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_function_injection_success_legacy_optional(injector: DependencyInjector) -> None:
     def run_service(service: Service | None) -> Service:
         assert service is not None
@@ -81,7 +81,7 @@ def test_class_injection_missing_class(injector: DependencyInjector) -> None:
         injector.inject(BrokenService)
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_class_injection_with_bindings(injector: DependencyInjector) -> None:
     injector.bind({RepoInterface: Repository})
 

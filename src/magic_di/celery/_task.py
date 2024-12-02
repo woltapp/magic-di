@@ -124,6 +124,7 @@ class InjectableCeleryTask(Task, Connectable, metaclass=InjectableCeleryTaskMeta
             run = self.injector.inject(orig_run) if self.injector else orig_run
 
             if "self" in inspect.signature(run).parameters:
+                setattr(self, "__retries", self.request.retries)
                 args = (self, *args)
 
             result = run(*args, **kwargs)

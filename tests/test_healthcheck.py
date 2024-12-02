@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 import pytest
+
 from magic_di import Connectable, DependencyInjector
 from magic_di.healthcheck import DependenciesHealthcheck
 
@@ -27,7 +28,7 @@ class PingableService(Connectable):
         self.ping_count += 1
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_healthcheck(injector: DependencyInjector) -> None:
     async def main(_: PingableService) -> None: ...
 

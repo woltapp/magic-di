@@ -39,7 +39,7 @@ fastapi = ["fastapi"]
 celery = ["celery"]
 
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 httpx = "*"
 pytest-asyncio = "*"
 celery-types = "*"

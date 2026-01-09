@@ -44,7 +44,7 @@ jobs:
       - uses: ./.github/actions/python-poetry-env
         with:
           python-version: ${{ matrix.python-version }}
-      - run: poetry run pytest
+      - run: poetry run pytest -v --tb=short --timeout=30
 
   docs:
     runs-on: ubuntu-latest

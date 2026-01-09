@@ -173,7 +173,7 @@ def test_injector_flag_injectable(injector: DependencyInjector) -> None:
 
 
 def test_injector_pydantic_metaclass_doesnt_break(injector: DependencyInjector) -> None:
-    from pydantic import BaseModel
+    from pydantic import BaseModel  # noqa: PLC0415
 
     class PydanticClass(BaseModel, Connectable):
         var: int = 1

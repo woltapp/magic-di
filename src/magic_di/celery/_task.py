@@ -73,7 +73,7 @@ class InjectableCeleryTask(Task, Connectable, metaclass=InjectableCeleryTaskMeta
 
         if isinstance(self.app.loader, InjectedCeleryLoaderProtocol):
             loader: InjectedCeleryLoaderProtocol = cast(
-                InjectedCeleryLoaderProtocol,
+                "InjectedCeleryLoaderProtocol",
                 self.app.loader,
             )
 
@@ -84,7 +84,7 @@ class InjectableCeleryTask(Task, Connectable, metaclass=InjectableCeleryTaskMeta
     def load(self) -> None:
         if isinstance(self.app.loader, InjectedCeleryLoaderProtocol):
             loader: InjectedCeleryLoaderProtocol = cast(
-                InjectedCeleryLoaderProtocol,
+                "InjectedCeleryLoaderProtocol",
                 self.app.loader,
             )
             loader.on_worker_process_init()
@@ -98,7 +98,7 @@ class InjectableCeleryTask(Task, Connectable, metaclass=InjectableCeleryTaskMeta
             return True
 
         loader: InjectedCeleryLoaderProtocol = cast(
-            InjectedCeleryLoaderProtocol,
+            "InjectedCeleryLoaderProtocol",
             self.app.loader,
         )
         return loader.loaded
@@ -106,7 +106,7 @@ class InjectableCeleryTask(Task, Connectable, metaclass=InjectableCeleryTaskMeta
     def get_event_loop(self) -> EventLoop | None:
         if isinstance(self.app.loader, InjectedCeleryLoaderProtocol):
             loader: InjectedCeleryLoaderProtocol = cast(
-                InjectedCeleryLoaderProtocol,
+                "InjectedCeleryLoaderProtocol",
                 self.app.loader,
             )
 

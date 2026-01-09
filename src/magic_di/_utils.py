@@ -6,7 +6,7 @@ from typing import get_type_hints as _get_type_hints
 from magic_di import ConnectableProtocol
 
 LegacyUnionType = type(object | None)
-LegacyOptionalType = type(Optional[object])  # noqa: UP007,UP045
+LegacyOptionalType = type(Optional[object])  # noqa: UP045
 
 try:
     from types import UnionType  # type: ignore[import-error,unused-ignore]

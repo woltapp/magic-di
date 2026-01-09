@@ -216,7 +216,7 @@ class DependencyInjector:
             injected = self.inject(obj)()
             return injected
 
-        return cast(type[T], inject)
+        return cast("type[T]", inject)
 
     def bind(self, bindings: dict[type, type]) -> None:
         """

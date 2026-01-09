@@ -61,7 +61,7 @@ class InjectableCeleryTask(Task, Connectable, metaclass=InjectableCeleryTaskMeta
         for dep in self.injector.inspect(self.run).deps.values():
             self.injector.lazy_inject(dep)
 
-        deps_cls = get_type_hints(self).get("deps", BaseCeleryConnectableDeps)
+        deps_cls = get_type_hints(type(self)).get("deps", BaseCeleryConnectableDeps)
         self.deps = self.injector.inject(deps_cls)()
 
         super().__init__()

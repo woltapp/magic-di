@@ -28,7 +28,7 @@ class EventLoopGetter:
             if self._event_loop:
                 return self._event_loop
 
-            self._event_loop = asyncio.get_event_loop()
+            self._event_loop = asyncio.new_event_loop()
             self._loop_thread = threading.Thread(
                 target=self._event_loop.run_forever,
                 daemon=True,

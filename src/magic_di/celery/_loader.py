@@ -6,7 +6,7 @@ import threading
 from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
 
 from celery import signals
-from celery.loaders.app import AppLoader  # type: ignore[import-untyped]
+from celery.loaders.app import AppLoader
 
 from magic_di import DependencyInjector
 from magic_di.celery._async_utils import EventLoop, EventLoopGetter, run_in_event_loop
@@ -35,7 +35,7 @@ def get_celery_loader(
     _injector = injector or DependencyInjector()
     _event_loop_getter = event_loop_getter or EventLoopGetter()
 
-    class CeleryLoader(AppLoader):  # type: ignore[no-any-unimported, misc]
+    class CeleryLoader(AppLoader):
         def __init__(self, *args: Any, **kwargs: Any) -> None:
             super().__init__(*args, **kwargs)
             self.injector = _injector
@@ -54,7 +54,7 @@ def get_celery_loader(
                     self.injector.connect(),
                     self.get_event_loop(),
                 )
-                super().on_worker_process_init()
+                super().on_worker_process_init()  # type: ignore[misc]
                 log_fn(f"Celery deps are connected for pid {os.getpid()}")
 
                 signals.worker_process_shutdown.connect(

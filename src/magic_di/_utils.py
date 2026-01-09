@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Optional, TypeVar, cast, get_args
+from typing import Any, Optional, TypeVar, get_args
 from typing import get_type_hints as _get_type_hints
 
 from magic_di import ConnectableProtocol
@@ -11,7 +11,7 @@ LegacyOptionalType = type(Optional[object])  # noqa: UP007,UP045
 try:
     from types import UnionType  # type: ignore[import-error,unused-ignore]
 except ImportError:
-    UnionType = LegacyUnionType  # type: ignore[misc]
+    UnionType = LegacyUnionType  # type: ignore[assignment,misc]
 
 
 T = TypeVar("T")
@@ -52,16 +52,16 @@ def get_cls_from_optional(cls: T) -> T:
 
     optional_type_hint_args_len = 2
     if len(args) != optional_type_hint_args_len:
-        return cast(T, cls)
+        return cls
 
     if NONE_TYPE not in args:
-        return cast(T, cls)
+        return cls
 
     for typo in args:
         if not safe_is_subclass(typo, NONE_TYPE):
-            return cast(T, typo)
+            return typo  # type: ignore[no-any-return]
 
-    return cast(T, cls)
+    return cls
 
 
 def safe_is_subclass(sub_cls: Any, cls: type) -> bool:

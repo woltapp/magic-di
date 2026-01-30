@@ -61,7 +61,7 @@ def service_ping_task(celery_app: Celery) -> InjectableCeleryTask:
     ) -> tuple[int, str, bool]:
         return arg1, arg2, service.is_alive()
 
-    return cast(InjectableCeleryTask, service_ping)
+    return cast("InjectableCeleryTask", service_ping)
 
 
 @pytest.fixture(scope="module")
@@ -74,7 +74,7 @@ def service_ping_task_sync(celery_app: Celery) -> InjectableCeleryTask:
     ) -> tuple[int, str, bool]:
         return arg1, arg2, service.is_alive()
 
-    return cast(InjectableCeleryTask, service_ping_sync)
+    return cast("InjectableCeleryTask", service_ping_sync)
 
 
 @pytest.fixture(scope="module")

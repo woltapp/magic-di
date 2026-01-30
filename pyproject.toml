@@ -21,6 +21,8 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Typing :: Typed",
 ]
@@ -39,7 +41,7 @@ fastapi = ["fastapi"]
 celery = ["celery"]
 
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 httpx = "*"
 pytest-asyncio = "*"
 celery-types = "*"
@@ -52,6 +54,7 @@ pymdown-extensions = "*"
 pytest = "*"
 pytest-github-actions-annotate-failures = "*"
 pytest-cov = "*"
+pytest-timeout = "*"
 python-kacl = "*"
 ruff = ">=0.2.0"
 pydantic = "*"

@@ -61,7 +61,7 @@ class InjectableCeleryTask(Task, Connectable, metaclass=InjectableCeleryTaskMeta
         for dep in self.injector.inspect(self.run).deps.values():
             self.injector.lazy_inject(dep)
 
-        deps_cls = get_type_hints(self).get("deps", BaseCeleryConnectableDeps)
+        deps_cls = get_type_hints(type(self)).get("deps", BaseCeleryConnectableDeps)
         self.deps = self.injector.inject(deps_cls)()
 
         super().__init__()
@@ -73,7 +73,7 @@ class InjectableCeleryTask(Task, Connectable, metaclass=InjectableCeleryTaskMeta
 
         if isinstance(self.app.loader, InjectedCeleryLoaderProtocol):
             loader: InjectedCeleryLoaderProtocol = cast(
-                InjectedCeleryLoaderProtocol,
+                "InjectedCeleryLoaderProtocol",
                 self.app.loader,
             )
 
@@ -84,7 +84,7 @@ class InjectableCeleryTask(Task, Connectable, metaclass=InjectableCeleryTaskMeta
     def load(self) -> None:
         if isinstance(self.app.loader, InjectedCeleryLoaderProtocol):
             loader: InjectedCeleryLoaderProtocol = cast(
-                InjectedCeleryLoaderProtocol,
+                "InjectedCeleryLoaderProtocol",
                 self.app.loader,
             )
             loader.on_worker_process_init()
@@ -98,7 +98,7 @@ class InjectableCeleryTask(Task, Connectable, metaclass=InjectableCeleryTaskMeta
             return True
 
         loader: InjectedCeleryLoaderProtocol = cast(
-            InjectedCeleryLoaderProtocol,
+            "InjectedCeleryLoaderProtocol",
             self.app.loader,
         )
         return loader.loaded
@@ -106,7 +106,7 @@ class InjectableCeleryTask(Task, Connectable, metaclass=InjectableCeleryTaskMeta
     def get_event_loop(self) -> EventLoop | None:
         if isinstance(self.app.loader, InjectedCeleryLoaderProtocol):
             loader: InjectedCeleryLoaderProtocol = cast(
-                InjectedCeleryLoaderProtocol,
+                "InjectedCeleryLoaderProtocol",
                 self.app.loader,
             )
 

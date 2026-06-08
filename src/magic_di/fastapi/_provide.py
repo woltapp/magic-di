@@ -17,7 +17,8 @@ class FastAPIInjectionError(Exception): ...
 
 
 if TYPE_CHECKING:
-    from typing import Union as Provide  # hack for mypy # noqa: FIX004
+    _T = TypeVar("_T")
+    Provide = Annotated[_T, ""]
 else:
 
     class Provide:

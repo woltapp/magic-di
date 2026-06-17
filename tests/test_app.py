@@ -6,6 +6,7 @@ from starlette.testclient import TestClient
 
 from magic_di import DependencyInjector
 from magic_di.fastapi import Provide, inject_app
+from magic_di.fastapi._app import IncludedRouterProtocol
 from magic_di.fastapi._provide import FastAPIInjectionError
 from tests.conftest import Database, Service
 
@@ -118,6 +119,41 @@ def test_app_injection_clients_connect(
         "service_connected": False,
         "workers_connected": False,
     }
+
+
+@pytest.mark.parametrize("flatten_included_routes", [False, True])
+def test_app_injection_collects_included_router_dependencies(
+    injector: DependencyInjector,
+    *,
+    flatten_included_routes: bool,
+) -> None:
+    app = inject_app(FastAPI(), injector=injector)
+
+    router = APIRouter()
+
+    @router.get(path="/hello-world")
+    def hello_world(service: Provide[Service]) -> dict[str, bool]:
+        return {"connected": service.connected}
+
+    if flatten_included_routes:
+        # Emulate FastAPI < 0.137, where include_router copied the sub-router's
+        # APIRoute objects straight into the parent router's routes.
+        app.router.routes.extend(router.routes)
+    else:
+        # FastAPI >= 0.137 keeps the sub-router as an _IncludedRouter wrapper node.
+        app.include_router(router)
+
+    included_wrappers = [
+        route for route in app.router.routes if isinstance(route, IncludedRouterProtocol)
+    ]
+    if flatten_included_routes:
+        assert not included_wrappers
+    else:
+        assert included_wrappers
+
+    with TestClient(app) as client:
+        resp = client.get("/hello-world")
+        assert resp.json() == {"connected": True}
 
 
 def test_app_injection_without_registered_injector(injector: DependencyInjector) -> None:

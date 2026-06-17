@@ -2,6 +2,7 @@ from typing import Annotated
 
 import pytest
 from fastapi import APIRouter, Depends, FastAPI
+from starlette.routing import Mount
 from starlette.testclient import TestClient
 
 from magic_di import DependencyInjector
@@ -154,6 +155,34 @@ def test_app_injection_collects_included_router_dependencies(
     with TestClient(app) as client:
         resp = client.get("/hello-world")
         assert resp.json() == {"connected": True}
+
+
+def test_app_injection_skips_mounted_apps(injector: DependencyInjector) -> None:
+    app = inject_app(FastAPI(), injector=injector)
+
+    @app.get(path="/hello-world")
+    def hello_world(service: Provide[Service]) -> dict[str, bool]:
+        return {"connected": service.connected}
+
+    sub_app = FastAPI()
+
+    @sub_app.get(path="/sub")
+    def sub() -> dict[str, bool]:
+        return {"ok": True}
+
+    # Mounted apps appear as starlette.routing.Mount nodes in app.router.routes.
+    # They must be skipped during dependency collection rather than raising a
+    # TypeError for not matching RouterProtocol.
+    app.mount("/mounted", sub_app)
+
+    assert any(isinstance(route, Mount) for route in app.router.routes)
+
+    with TestClient(app) as client:
+        resp = client.get("/hello-world")
+        assert resp.json() == {"connected": True}
+
+        resp = client.get("/mounted/sub")
+        assert resp.json() == {"ok": True}
 
 
 def test_app_injection_without_registered_injector(injector: DependencyInjector) -> None:

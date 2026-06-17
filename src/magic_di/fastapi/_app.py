@@ -31,6 +31,14 @@ class FastAPIRouterProtocol(RouterProtocol, Protocol):
     dependencies: list[Depends]
 
 
+@runtime_checkable
+class IncludedRouterProtocol(Protocol):
+    # FastAPI >= 0.137 no longer flattens included routers into the parent's
+    # `routes`; it stores them as wrapper nodes exposing the original sub-router.
+    # https://github.com/fastapi/fastapi/pull/15745
+    original_router: routing.APIRouter
+
+
 def inject_app(
     app: FastAPI,
     *,
@@ -106,7 +114,7 @@ def _inject_app_with_events(app: FastAPI, collect_deps_fn: Callable[[], None]) -
     app.on_event("shutdown")(app.state.dependency_injector.disconnect)
 
 
-def _collect_dependencies(
+def _collect_dependencies(  # noqa: C901
     injector: DependencyInjector,
     app_router: routing.APIRouter,
 ) -> None:
@@ -121,6 +129,10 @@ def _collect_dependencies(
             _inspect_and_lazy_inject(dependency, injector)
 
     for route in app_router.routes:
+        if isinstance(route, IncludedRouterProtocol):
+            _collect_dependencies(injector, route.original_router)
+            continue
+
         if not isinstance(route, RouterProtocol):
             error_msg = (
                 "Unexpected router class. "
@@ -130,6 +142,9 @@ def _collect_dependencies(
 
         if isinstance(route, FastAPIRouterProtocol):
             for dependencies in route.dependencies:
+                if not dependencies.dependency:
+                    continue
+
                 for dependency in _find_fastapi_dependencies(dependencies.dependency):
                     _inspect_and_lazy_inject(dependency, injector)
 

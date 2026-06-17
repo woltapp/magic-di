@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 ### Changed
 - Replaced the `Union as Provide` mypy hack with an `Annotated`/`TypeVar` based type alias for the FastAPI `Provide` type hint
+- Updated dependecies collection to support FastAPI 0.137.0+ versions
 
 ## [0.3.0] - 2024-11-13
 ### Fixed

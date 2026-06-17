@@ -12,6 +12,7 @@ from typing import (
 )
 
 from fastapi.params import Depends
+from starlette.routing import Mount
 
 from magic_di._injector import DependencyInjector
 
@@ -131,6 +132,9 @@ def _collect_dependencies(  # noqa: C901
     for route in app_router.routes:
         if isinstance(route, IncludedRouterProtocol):
             _collect_dependencies(injector, route.original_router)
+            continue
+
+        if isinstance(route, Mount):
             continue
 
         if not isinstance(route, RouterProtocol):

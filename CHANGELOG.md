@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Skip mounted sub-applications (`starlette.routing.Mount`) during dependency collection instead of raising a `TypeError`
+
 ### Changed
 - Replaced the `Union as Provide` mypy hack with an `Annotated`/`TypeVar` based type alias for the FastAPI `Provide` type hint
 - Updated dependecies collection to support FastAPI 0.137.0+ versions
